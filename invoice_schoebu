@@ -1,0 +1,24 @@
+#!/usr/bin/ruby
+require 'fileutils'
+nr=ARGV.first
+unless ARGV.first
+  puts "Rechnungsnummer muss angegeben werden!"
+  exit 1
+end
+year=2014
+customer="#{File.basename(__FILE__).sub('invoice_', '')}"
+pdf_name="#{customer}_rechnung_#{nr}.pdf"
+gcfile="/home/niklaus/EigeneDateien/giger_electronique/Buchhaltung/#{year}/BH_electronique_#{year}.gnucash"
+cmd ="gcinvoice.py --gcfile=#{gcfile} --template=/opt/src/gcinvoice-0.1.5/invoice_#{customer}.tex --config=gcinvoicrc --outfile=ausgabe.tex #{nr}"
+unless system(cmd)
+  puts "Running #{cmd} failed"
+  exit 2
+end
+cmd2 = "latex -output-format=pdf ausgabe.tex > /dev/null"
+unless system(cmd2)
+  puts "Running #{cmd2} failed"
+  exit 3
+end
+FileUtils.cp('ausgabe.pdf', pdf_name, :verbose => true)
+FileUtils.rm(Dir.glob('ausgabe.*'), :verbose => true)
+puts "#{year}: Für Rechnung #{nr} wurde PDF erstellt: #{pdf_name}"

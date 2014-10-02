@@ -1,0 +1,64 @@
+\documentclass[paper=a4,fontsize=11pt,DIV=12]{scrlttr2}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[gen]{eurosym}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{microtype}
+\usepackage{dcolumn}
+\usepackage{booktabs}
+\usepackage[ngerman]{babel}
+
+\LoadLetterOption{DINmtext}
+\KOMAoptions{enlargefirstpage=true,fromalign=right,fromphone=true,fromemail=true,backaddress=true,parskip=half*}
+
+\setkomavar{fromname}{Niklaus Giger éléctronique}
+\setkomavar{fromaddress}{%
+  Wieshoschet 6\\
+  CH-8753 Mollis
+  }
+\setkomavar{fromphone}{+41 55 612 20 54}
+\setkomavar{fromemail}{niklaus.giger@member.fsf.org}
+
+\begin{document}
+
+\begin{letter}{
+  \textbf{@{owner['full_name']}}\\
+%+ for a in owner['address']:
+    @{a}\\
+%-
+}
+
+\setkomavar{subject}{%
+  @{notes}}
+\setkomavar{invoice}{@{id}}
+
+\opening{Lieber Peter}
+
+Die Auflistung der geleisteten Stunden findest Du in der beiliegenden CSV-Datei.
+
+\begin{tabular}[t]{D{,}{,}{2}p{22em}D{,}{,}{2}D{,}{,}{2}D{,}{,}{2}D{,}{,}{2}}
+  \multicolumn{1}{c}{Stunden} &	Beschreibung &	\multicolumn{1}{c}{Ansatz} 
+  & \multicolumn{1}{c}{Zwischentotal}\\ \midrule
+%+ for e in entries:
+@{e['qty']} &   @{e['description']} &   @{e['price']} &   @{e['amount_net']} \\
+%-
+\midrule
+   &	 \textbf{ Total} &	\textbf{SFr.}	& \textbf{@{amount_gross}} \\
+\midrule
+\end{tabular}
+
+Als Selbständigerwerbender (erfasst als Abrechnungs-Nummer 313.585 bei Kantonale Ausgleichskasse
+Glarus) bin ich nicht der MwSt unterworfen.
+
+Für die Überweisung innert 30 Tagen auf mein Konto bei der Glarner Kantonalbank,
+CH-8750 Glarus, PC 87-62-5, IBAN CH21 0077 3000 5223 8014 6 bin ich Dir dankbar.
+
+Ich hoffe, dass auch im letzten Quartal Elexis für Dich noch ein bisschen besser geworden ist und freue mich auf die weitere
+Zusammenarbeit.
+
+\closing{Mit lieben Grüssen}
+
+\end{letter}
+
+\end{document}
