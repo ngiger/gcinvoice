@@ -1,0 +1,22 @@
+Metadata-Version: 1.0
+Name: gcinvoice
+Version: 0.1.5
+Summary: Parse Gnucash data and create invoices
+Home-page: http://www.smoerz.org/gcinvoice
+Author: Roman Bertle
+Author-email: bertle@smoerz.org
+License: UNKNOWN
+Description: A module to parse Gnucash data and create invoices.
+        
+        The module provides a class to parse Gnucash data files (only data relevant
+        for invoices is extracted), and to create invoices from templates. The module
+        can also be run as a script.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: License :: OSI Approved :: Python Software Foundation License
+Classifier: Programming Language :: Python
+Classifier: Topic :: Office/Business :: Financial :: Accounting

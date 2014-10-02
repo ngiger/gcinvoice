@@ -1,0 +1,63 @@
+\documentclass[paper=a4,fontsize=11pt,DIV=12]{scrlttr2}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[gen]{eurosym}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{microtype}
+\usepackage{dcolumn}
+\usepackage{booktabs}
+\usepackage[english]{babel}
+
+\LoadLetterOption{DINmtext}
+\KOMAoptions{enlargefirstpage=true,fromalign=right,fromphone=true,fromemail=true,backaddress=true,parskip=half*}
+
+\setkomavar{fromname}{Kleopatra}
+\setkomavar{fromaddress}{%
+  Brucheion\\
+  Alexandria
+  }
+\setkomavar{fromphone}{+987654321}
+\setkomavar{fromemail}{foo@invalid.invalid}
+
+\begin{document}
+
+\begin{letter}{To\\
+  @{owner['full_name']}\\
+%+ for a in owner['address']:
+    @{a}\\
+%-
+}
+
+\setkomavar{subject}{%
+  @{notes}}
+\setkomavar{invoice}{@{id}}
+
+\opening{Dear user of gcinvoice,}
+
+this invoice template demonstrates some features of gcinvoice, and is also used
+by the test suite.
+The \emph{special discount} demonstrates that arbitrary python expressions can be
+used.
+It also shows how to calculate and format numbers.
+Prices are in €.
+
+\begin{tabular}[t]{D{,}{,}{2}p{22em}D{,}{,}{2}D{,}{,}{2}D{,}{,}{2}D{,}{,}{2}}
+  \multicolumn{1}{c}{Quantity} &	Item &	\multicolumn{1}{c}{Price} &
+  \multicolumn{1}{c}{Discount} &      \multicolumn{1}{c}{Taxes} &      \multicolumn{1}{c}{Amount}\\ \midrule
+%+ for e in entries:
+@{e['qty']} &   @{e['description']} &   @{e['price']} & @{e['amount_discount']} & @{e['amount_taxes']} &   @{e['amount_net']} \\
+%-
+\midrule
+     &	Net amount &		&       &       &	@{amount_net}\\
+     &	+ Taxes &	&       &       &	@{amount_taxes} \\ \cmidrule{6-6}
+     &	Gross amount &		&       &       &	@{amount_gross} \\
+     &	\multicolumn{2}{l}{my special discount (not in Gnucash)} &      &   &	@{cformat(Decimal('0.1') * amount_net_)} \\ \cmidrule{6-6}
+     &	Final amount &  &       &	& @{cformat(amount_gross_ - Decimal('0.1') * amount_net_)}
+\end{tabular}
+
+\closing{Best Regards}
+
+\end{letter}
+
+\end{document}

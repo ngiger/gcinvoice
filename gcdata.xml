@@ -1,0 +1,1312 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">245e1531535f2da783a76de6c8b45ef6</book:id>
+<book:slots>
+  <slot>
+    <slot:key>counters</slot:key>
+    <slot:value type="frame">
+      <slot>
+        <slot:key>gncCustomer</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>gncInvoice</slot:key>
+        <slot:value type="integer">5</slot:value>
+      </slot>
+      <slot>
+        <slot:key>gncVendor</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>gncJob</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+    </slot:value>
+  </slot>
+</book:slots>
+<gnc:count-data cd:type="account">9</gnc:count-data>
+<gnc:count-data cd:type="transaction">5</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncJob">2</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncInvoice">5</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncCustomer">1</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncBillTerm">2</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncTaxTable">2</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncEntry">21</gnc:count-data>
+<gnc:count-data cd:type="gnc:GncVendor">1</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>EUR</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>USD</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">9a1ef9ed42653a472c434d0fb003db51</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktiva</act:name>
+  <act:id type="guid">ac8224a9bc65d060a3ca9cc20455875e</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">9a1ef9ed42653a472c434d0fb003db51</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Receivables</act:name>
+  <act:id type="guid">c17961aaa01d9823688f311a408679dd</act:id>
+  <act:type>RECEIVABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">ac8224a9bc65d060a3ca9cc20455875e</act:parent>
+  <act:lots>
+    <gnc:lot version="2.0.0">
+      <lot:id type="guid">03e8b087dc990e8fd231ede3a996b466</lot:id>
+      <lot:slots>
+        <slot>
+          <slot:key>title</slot:key>
+          <slot:value type="string">Invoice 000005</slot:value>
+        </slot>
+        <slot>
+          <slot:key>gncInvoice</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>invoice-guid</slot:key>
+              <slot:value type="guid">eaa069411f46260c90db6d852984861d</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+      </lot:slots>
+    </gnc:lot>
+    <gnc:lot version="2.0.0">
+      <lot:id type="guid">b64be47a0193cdc4054826ede9d456e0</lot:id>
+      <lot:slots>
+        <slot>
+          <slot:key>title</slot:key>
+          <slot:value type="string">Rechnung 000001</slot:value>
+        </slot>
+        <slot>
+          <slot:key>gncInvoice</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>invoice-guid</slot:key>
+              <slot:value type="guid">31cf0c86220ec3ef67be360f8c4416fb</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+      </lot:slots>
+    </gnc:lot>
+    <gnc:lot version="2.0.0">
+      <lot:id type="guid">5405f8d3195096c35abc686515b1a7db</lot:id>
+      <lot:slots>
+        <slot>
+          <slot:key>title</slot:key>
+          <slot:value type="string">Invoice 000003</slot:value>
+        </slot>
+        <slot>
+          <slot:key>gncInvoice</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>invoice-guid</slot:key>
+              <slot:value type="guid">a96b54870cbe6060c270b2652d35e710</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+      </lot:slots>
+    </gnc:lot>
+  </act:lots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cash</act:name>
+  <act:id type="guid">48d8946cd6571d8e2bd9b28e3962d448</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">ac8224a9bc65d060a3ca9cc20455875e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Passiva</act:name>
+  <act:id type="guid">20cee2b37ef38e65fae8ece63b31e12f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">9a1ef9ed42653a472c434d0fb003db51</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>VAT</act:name>
+  <act:id type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">20cee2b37ef38e65fae8ece63b31e12f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>A/Payable</act:name>
+  <act:id type="guid">49b769ede6b0182507dfb3c29bd28480</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">20cee2b37ef38e65fae8ece63b31e12f</act:parent>
+  <act:lots>
+    <gnc:lot version="2.0.0">
+      <lot:id type="guid">1e977d6544148456d930613a803f1823</lot:id>
+      <lot:slots>
+        <slot>
+          <slot:key>title</slot:key>
+          <slot:value type="string">Bill 000002</slot:value>
+        </slot>
+        <slot>
+          <slot:key>gncInvoice</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>invoice-guid</slot:key>
+              <slot:value type="guid">feef793eae7001905aa1976469b1304e</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+      </lot:slots>
+    </gnc:lot>
+    <gnc:lot version="2.0.0">
+      <lot:id type="guid">c7aabbba539f1d8427c375629557823a</lot:id>
+      <lot:slots>
+        <slot>
+          <slot:key>title</slot:key>
+          <slot:value type="string">Bill 000004</slot:value>
+        </slot>
+        <slot>
+          <slot:key>gncInvoice</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>invoice-guid</slot:key>
+              <slot:value type="guid">412a79664af3e15cfa481db82459773a</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+      </lot:slots>
+    </gnc:lot>
+  </act:lots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income</act:name>
+  <act:id type="guid">4d2fcc962790dc4119e409d1f8c7dd51</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">9a1ef9ed42653a472c434d0fb003db51</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Expense</act:name>
+  <act:id type="guid">fda0613b3a2339508b21d72b234ca184</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">9a1ef9ed42653a472c434d0fb003db51</act:parent>
+</gnc:account>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">1a46e8f6ee1d34276ac53ebfde098d4b</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>000001</trn:num>
+  <trn:date-posted>
+    <ts:date>2008-02-22 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2008-02-22 21:15:51 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>Caesar</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>gncInvoice</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>invoice-guid</slot:key>
+          <slot:value type="guid">31cf0c86220ec3ef67be360f8c4416fb</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-date-due</slot:key>
+      <slot:value type="timespec">
+        <ts:date>2008-03-23 00:00:00 +0100</ts:date>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-read-only</slot:key>
+      <slot:value type="string">Aus einer Rechnung erzeugt. Für Änderungen müssen Sie die Buchung der Rechnung löschen.</slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-txn-type</slot:key>
+      <slot:value type="string">I</slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">825224b7c35bdda3eed92eb6ed7560d5</split:id>
+      <split:memo>Items for Caesar in March</split:memo>
+      <split:action>Rechnung</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1900446/100</split:value>
+      <split:quantity>1900446/100</split:quantity>
+      <split:account type="guid">c17961aaa01d9823688f311a408679dd</split:account>
+      <split:lot type="guid">b64be47a0193cdc4054826ede9d456e0</split:lot>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">b1ac78e506fd5bce80b8dead64d7e63d</split:id>
+      <split:memo>Items for Caesar in March</split:memo>
+      <split:action>Rechnung</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-429619/100</split:value>
+      <split:quantity>-429619/100</split:quantity>
+      <split:account type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">2cd45a3ea441222960d410653018867f</split:id>
+      <split:memo>Items for Caesar in March</split:memo>
+      <split:action>Rechnung</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1470827/100</split:value>
+      <split:quantity>-1470827/100</split:quantity>
+      <split:account type="guid">4d2fcc962790dc4119e409d1f8c7dd51</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">897862f6af51c4c3d9885ff81e7dcd01</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>000003</trn:num>
+  <trn:date-posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2010-07-09 13:16:25 +0200</ts:date>
+  </trn:date-entered>
+  <trn:description>Caesar</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>gncInvoice</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>invoice-guid</slot:key>
+          <slot:value type="guid">a96b54870cbe6060c270b2652d35e710</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-date-due</slot:key>
+      <slot:value type="timespec">
+        <ts:date>2010-08-08 00:00:00 +0200</ts:date>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-read-only</slot:key>
+      <slot:value type="string">Generated from an invoice.  Try unposting the invoice.</slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-txn-type</slot:key>
+      <slot:value type="string">I</slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">993927e8464415d3674de31d45269c7a</split:id>
+      <split:memo>Legions for Julius</split:memo>
+      <split:action>Invoice</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>2605000/100</split:value>
+      <split:quantity>2605000/100</split:quantity>
+      <split:account type="guid">c17961aaa01d9823688f311a408679dd</split:account>
+      <split:lot type="guid">5405f8d3195096c35abc686515b1a7db</split:lot>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">420dad59da6222aec3859a37892aaed0</split:id>
+      <split:memo>Legions for Julius</split:memo>
+      <split:action>Invoice</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-605000/100</split:value>
+      <split:quantity>-605000/100</split:quantity>
+      <split:account type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">26f58f85913eee48ae45e0b471700494</split:id>
+      <split:memo>Legions for Julius</split:memo>
+      <split:action>Invoice</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2000000/100</split:value>
+      <split:quantity>-2000000/100</split:quantity>
+      <split:account type="guid">4d2fcc962790dc4119e409d1f8c7dd51</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">194a70fc53dda01292d653ed63b5c402</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>000005</trn:num>
+  <trn:date-posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2010-07-09 15:40:41 +0200</ts:date>
+  </trn:date-entered>
+  <trn:description>Caesar</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>gncInvoice</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>invoice-guid</slot:key>
+          <slot:value type="guid">eaa069411f46260c90db6d852984861d</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-date-due</slot:key>
+      <slot:value type="timespec">
+        <ts:date>2010-08-08 00:00:00 +0200</ts:date>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-read-only</slot:key>
+      <slot:value type="string">Generated from an invoice.  Try unposting the invoice.</slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-txn-type</slot:key>
+      <slot:value type="string">I</slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">86be663662879ba36934b1778c1a0594</split:id>
+      <split:memo>A little bit of beer</split:memo>
+      <split:action>Invoice</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>7600/100</split:value>
+      <split:quantity>7600/100</split:quantity>
+      <split:account type="guid">c17961aaa01d9823688f311a408679dd</split:account>
+      <split:lot type="guid">03e8b087dc990e8fd231ede3a996b466</split:lot>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">830092a21214597ab058e76bd89dbfa8</split:id>
+      <split:memo>A little bit of beer</split:memo>
+      <split:action>Invoice</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-5600/100</split:value>
+      <split:quantity>-5600/100</split:quantity>
+      <split:account type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">8f43deda1df1fbdca09387abd946c741</split:id>
+      <split:memo>A little bit of beer</split:memo>
+      <split:action>Invoice</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2000/100</split:value>
+      <split:quantity>-2000/100</split:quantity>
+      <split:account type="guid">4d2fcc962790dc4119e409d1f8c7dd51</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">80719d625e51712881aca89f01742fd7</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>000002</trn:num>
+  <trn:date-posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2010-07-09 13:13:00 +0200</ts:date>
+  </trn:date-entered>
+  <trn:description>Crassus</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>gncInvoice</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>invoice-guid</slot:key>
+          <slot:value type="guid">feef793eae7001905aa1976469b1304e</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-date-due</slot:key>
+      <slot:value type="timespec">
+        <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-read-only</slot:key>
+      <slot:value type="string">Generated from an invoice.  Try unposting the invoice.</slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-txn-type</slot:key>
+      <slot:value type="string">I</slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">21c056972d28c768c2d638d9c8f6e357</split:id>
+      <split:memo>Wine from Crassus</split:memo>
+      <split:action>Bill</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>8000/100</split:value>
+      <split:quantity>8000/100</split:quantity>
+      <split:account type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">0b924141f08855614b32543072aef8ef</split:id>
+      <split:memo>Wine from Crassus</split:memo>
+      <split:action>Bill</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>10000/100</split:value>
+      <split:quantity>0/100</split:quantity>
+      <split:account type="guid">fda0613b3a2339508b21d72b234ca184</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">7794240de1a18ea83799f823f336f43f</split:id>
+      <split:memo>Wine from Crassus</split:memo>
+      <split:action>Bill</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-18000/100</split:value>
+      <split:quantity>0/100</split:quantity>
+      <split:account type="guid">49b769ede6b0182507dfb3c29bd28480</split:account>
+      <split:lot type="guid">1e977d6544148456d930613a803f1823</split:lot>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">9f7528ab5a778b4d5a16dd3a25fa2373</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>000004</trn:num>
+  <trn:date-posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2010-07-09 13:18:19 +0200</ts:date>
+  </trn:date-entered>
+  <trn:description>Crassus</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>gncInvoice</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>invoice-guid</slot:key>
+          <slot:value type="guid">412a79664af3e15cfa481db82459773a</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-date-due</slot:key>
+      <slot:value type="timespec">
+        <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-read-only</slot:key>
+      <slot:value type="string">Generated from an invoice.  Try unposting the invoice.</slot:value>
+    </slot>
+    <slot>
+      <slot:key>trans-txn-type</slot:key>
+      <slot:value type="string">I</slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">46b7750b8aae929968270e8fab7c0a36</split:id>
+      <split:memo>Crassus' Wine for Julius' Legions</split:memo>
+      <split:action>Bill</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>155000/100</split:value>
+      <split:quantity>155000/100</split:quantity>
+      <split:account type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">52c91b34aeb402e19fcf5c521abaee75</split:id>
+      <split:memo>Crassus' Wine for Julius' Legions</split:memo>
+      <split:action>Bill</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>500000/100</split:value>
+      <split:quantity>0/100</split:quantity>
+      <split:account type="guid">fda0613b3a2339508b21d72b234ca184</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">92a9bc40a49726c0100c2dcd35e4eabd</split:id>
+      <split:memo>Crassus' Wine for Julius' Legions</split:memo>
+      <split:action>Bill</split:action>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-655000/100</split:value>
+      <split:quantity>0/100</split:quantity>
+      <split:account type="guid">49b769ede6b0182507dfb3c29bd28480</split:account>
+      <split:lot type="guid">c7aabbba539f1d8427c375629557823a</split:lot>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:GncJob version="2.0.0">
+  <job:guid type="guid">0568d5e3911c33eb8761f9177554d10e</job:guid>
+  <job:id>777</job:id>
+  <job:name>Wine</job:name>
+  <job:reference>010203</job:reference>
+  <job:owner version="2.0.0">
+    <owner:type>gncVendor</owner:type>
+    <owner:id type="guid">6b5ef6b315fb583cfc994d0857dc62cf</owner:id>
+  </job:owner>
+  <job:active>1</job:active>
+</gnc:GncJob>
+<gnc:GncJob version="2.0.0">
+  <job:guid type="guid">6a89fad0d72a7071e9213a4f54a76cab</job:guid>
+  <job:id>000001</job:id>
+  <job:name>Two Legions</job:name>
+  <job:owner version="2.0.0">
+    <owner:type>gncCustomer</owner:type>
+    <owner:id type="guid">ec6e7eca10bf375752b74aaab55cd75c</owner:id>
+  </job:owner>
+  <job:active>1</job:active>
+</gnc:GncJob>
+<gnc:GncInvoice version="2.0.0">
+  <invoice:guid type="guid">eaa069411f46260c90db6d852984861d</invoice:guid>
+  <invoice:id>000005</invoice:id>
+  <invoice:owner version="2.0.0">
+    <owner:type>gncCustomer</owner:type>
+    <owner:id type="guid">ec6e7eca10bf375752b74aaab55cd75c</owner:id>
+  </invoice:owner>
+  <invoice:opened>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:opened>
+  <invoice:posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:posted>
+  <invoice:terms type="guid">d1f7440a38bceede661256a9bb5639c7</invoice:terms>
+  <invoice:billing_id>445</invoice:billing_id>
+  <invoice:notes>Some beer</invoice:notes>
+  <invoice:active>1</invoice:active>
+  <invoice:posttxn type="guid">194a70fc53dda01292d653ed63b5c402</invoice:posttxn>
+  <invoice:postlot type="guid">03e8b087dc990e8fd231ede3a996b466</invoice:postlot>
+  <invoice:postacc type="guid">c17961aaa01d9823688f311a408679dd</invoice:postacc>
+  <invoice:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </invoice:currency>
+</gnc:GncInvoice>
+<gnc:GncInvoice version="2.0.0">
+  <invoice:guid type="guid">feef793eae7001905aa1976469b1304e</invoice:guid>
+  <invoice:id>000002</invoice:id>
+  <invoice:owner version="2.0.0">
+    <owner:type>gncVendor</owner:type>
+    <owner:id type="guid">6b5ef6b315fb583cfc994d0857dc62cf</owner:id>
+  </invoice:owner>
+  <invoice:opened>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:opened>
+  <invoice:posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:posted>
+  <invoice:billing_id>987</invoice:billing_id>
+  <invoice:notes>Olives, good</invoice:notes>
+  <invoice:active>1</invoice:active>
+  <invoice:posttxn type="guid">80719d625e51712881aca89f01742fd7</invoice:posttxn>
+  <invoice:postlot type="guid">1e977d6544148456d930613a803f1823</invoice:postlot>
+  <invoice:postacc type="guid">49b769ede6b0182507dfb3c29bd28480</invoice:postacc>
+  <invoice:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </invoice:currency>
+</gnc:GncInvoice>
+<gnc:GncInvoice version="2.0.0">
+  <invoice:guid type="guid">412a79664af3e15cfa481db82459773a</invoice:guid>
+  <invoice:id>000004</invoice:id>
+  <invoice:owner version="2.0.0">
+    <owner:type>gncJob</owner:type>
+    <owner:id type="guid">0568d5e3911c33eb8761f9177554d10e</owner:id>
+  </invoice:owner>
+  <invoice:opened>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:opened>
+  <invoice:posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:posted>
+  <invoice:billing_id>010203</invoice:billing_id>
+  <invoice:notes>Wine for the Legions</invoice:notes>
+  <invoice:active>1</invoice:active>
+  <invoice:posttxn type="guid">9f7528ab5a778b4d5a16dd3a25fa2373</invoice:posttxn>
+  <invoice:postlot type="guid">c7aabbba539f1d8427c375629557823a</invoice:postlot>
+  <invoice:postacc type="guid">49b769ede6b0182507dfb3c29bd28480</invoice:postacc>
+  <invoice:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </invoice:currency>
+  <invoice:billto version="2.0.0">
+    <owner:type>gncJob</owner:type>
+    <owner:id type="guid">6a89fad0d72a7071e9213a4f54a76cab</owner:id>
+  </invoice:billto>
+</gnc:GncInvoice>
+<gnc:GncInvoice version="2.0.0">
+  <invoice:guid type="guid">a96b54870cbe6060c270b2652d35e710</invoice:guid>
+  <invoice:id>000003</invoice:id>
+  <invoice:owner version="2.0.0">
+    <owner:type>gncJob</owner:type>
+    <owner:id type="guid">6a89fad0d72a7071e9213a4f54a76cab</owner:id>
+  </invoice:owner>
+  <invoice:opened>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:opened>
+  <invoice:posted>
+    <ts:date>2010-07-09 00:00:00 +0200</ts:date>
+  </invoice:posted>
+  <invoice:terms type="guid">d1f7440a38bceede661256a9bb5639c7</invoice:terms>
+  <invoice:notes>Two Legions for Caesar</invoice:notes>
+  <invoice:active>1</invoice:active>
+  <invoice:posttxn type="guid">897862f6af51c4c3d9885ff81e7dcd01</invoice:posttxn>
+  <invoice:postlot type="guid">5405f8d3195096c35abc686515b1a7db</invoice:postlot>
+  <invoice:postacc type="guid">c17961aaa01d9823688f311a408679dd</invoice:postacc>
+  <invoice:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </invoice:currency>
+</gnc:GncInvoice>
+<gnc:GncInvoice version="2.0.0">
+  <invoice:guid type="guid">31cf0c86220ec3ef67be360f8c4416fb</invoice:guid>
+  <invoice:id>000001</invoice:id>
+  <invoice:owner version="2.0.0">
+    <owner:type>gncCustomer</owner:type>
+    <owner:id type="guid">ec6e7eca10bf375752b74aaab55cd75c</owner:id>
+  </invoice:owner>
+  <invoice:opened>
+    <ts:date>2008-02-22 00:00:00 +0100</ts:date>
+  </invoice:opened>
+  <invoice:posted>
+    <ts:date>2008-02-22 00:00:00 +0100</ts:date>
+  </invoice:posted>
+  <invoice:terms type="guid">d1f7440a38bceede661256a9bb5639c7</invoice:terms>
+  <invoice:notes>Items delivered in March</invoice:notes>
+  <invoice:active>1</invoice:active>
+  <invoice:posttxn type="guid">1a46e8f6ee1d34276ac53ebfde098d4b</invoice:posttxn>
+  <invoice:postlot type="guid">b64be47a0193cdc4054826ede9d456e0</invoice:postlot>
+  <invoice:postacc type="guid">c17961aaa01d9823688f311a408679dd</invoice:postacc>
+  <invoice:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </invoice:currency>
+</gnc:GncInvoice>
+<gnc:GncCustomer version="2.0.0">
+  <cust:guid type="guid">ec6e7eca10bf375752b74aaab55cd75c</cust:guid>
+  <cust:name>Caesar</cust:name>
+  <cust:id>000001</cust:id>
+  <cust:addr version="2.0.0">
+    <addr:name>Gaius Julius Caesar</addr:name>
+    <addr:addr1>Palatin 7</addr:addr1>
+    <addr:addr2>Rome</addr:addr2>
+  </cust:addr>
+  <cust:shipaddr version="2.0.0"/>
+  <cust:terms type="guid">cf9e15a66f6414cda27c0c78449f4bce</cust:terms>
+  <cust:taxincluded>USEGLOBAL</cust:taxincluded>
+  <cust:active>1</cust:active>
+  <cust:discount>0/1</cust:discount>
+  <cust:credit>0/1</cust:credit>
+  <cust:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </cust:currency>
+  <cust:use-tt>1</cust:use-tt>
+  <cust:taxtable type="guid">f374d86b246da3603d0b9665d44fec9c</cust:taxtable>
+</gnc:GncCustomer>
+<gnc:GncBillTerm version="2.0.0">
+  <billterm:guid type="guid">cf9e15a66f6414cda27c0c78449f4bce</billterm:guid>
+  <billterm:name>Standard</billterm:name>
+  <billterm:desc/>
+  <billterm:refcount>1</billterm:refcount>
+  <billterm:invisible>0</billterm:invisible>
+  <billterm:child type="guid">d1f7440a38bceede661256a9bb5639c7</billterm:child>
+  <billterm:days>
+    <bt-days:due-days>30</bt-days:due-days>
+    <bt-days:disc-days>10</bt-days:disc-days>
+    <bt-days:discount>500000/100000</bt-days:discount>
+  </billterm:days>
+</gnc:GncBillTerm>
+<gnc:GncBillTerm version="2.0.0">
+  <billterm:guid type="guid">d1f7440a38bceede661256a9bb5639c7</billterm:guid>
+  <billterm:name>Standard</billterm:name>
+  <billterm:desc/>
+  <billterm:refcount>0</billterm:refcount>
+  <billterm:invisible>1</billterm:invisible>
+  <billterm:parent type="guid">cf9e15a66f6414cda27c0c78449f4bce</billterm:parent>
+  <billterm:days>
+    <bt-days:due-days>30</bt-days:due-days>
+    <bt-days:disc-days>10</bt-days:disc-days>
+    <bt-days:discount>500000/100000</bt-days:discount>
+  </billterm:days>
+</gnc:GncBillTerm>
+<gnc:GncTaxTable version="2.0.0">
+  <taxtable:guid type="guid">f374d86b246da3603d0b9665d44fec9c</taxtable:guid>
+  <taxtable:name>VAT</taxtable:name>
+  <taxtable:refcount>1</taxtable:refcount>
+  <taxtable:invisible>0</taxtable:invisible>
+  <taxtable:child type="guid">1b1a9e78db87ffa07886abe977011995</taxtable:child>
+  <taxtable:entries>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</tte:acct>
+      <tte:amount>1000000/100000</tte:amount>
+      <tte:type>PERCENT</tte:type>
+    </gnc:GncTaxTableEntry>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</tte:acct>
+      <tte:amount>2000000/100000</tte:amount>
+      <tte:type>PERCENT</tte:type>
+    </gnc:GncTaxTableEntry>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</tte:acct>
+      <tte:amount>5000000/100000</tte:amount>
+      <tte:type>VALUE</tte:type>
+    </gnc:GncTaxTableEntry>
+  </taxtable:entries>
+</gnc:GncTaxTable>
+<gnc:GncTaxTable version="2.0.0">
+  <taxtable:guid type="guid">1b1a9e78db87ffa07886abe977011995</taxtable:guid>
+  <taxtable:name>VAT</taxtable:name>
+  <taxtable:refcount>0</taxtable:refcount>
+  <taxtable:invisible>1</taxtable:invisible>
+  <taxtable:parent type="guid">f374d86b246da3603d0b9665d44fec9c</taxtable:parent>
+  <taxtable:entries>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</tte:acct>
+      <tte:amount>1000000/100000</tte:amount>
+      <tte:type>PERCENT</tte:type>
+    </gnc:GncTaxTableEntry>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</tte:acct>
+      <tte:amount>2000000/100000</tte:amount>
+      <tte:type>PERCENT</tte:type>
+    </gnc:GncTaxTableEntry>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">435cf52bac95f9c1ee4cf9fb114cc21d</tte:acct>
+      <tte:amount>5000000/100000</tte:amount>
+      <tte:type>VALUE</tte:type>
+    </gnc:GncTaxTableEntry>
+  </taxtable:entries>
+</gnc:GncTaxTable>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">7ebf2ee4511c70523f4be6f54e39bf6d</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:12:52 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes, posttax percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>POSTTAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">19144b12c75bafe7af94155986cb3546</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:11:28 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, sametime value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>SAMETIME</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">83b794c691503074e6f5841967a00968</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:10:52 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes, sametime percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>SAMETIME</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">abb5a554f3cb5036fce1bf821e7903e6</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:11:51 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes, sametime value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>SAMETIME</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">f2e465c3d346b706eb317fbc9596cc17</entry:guid>
+  <entry:date>
+    <ts:date>2010-07-09 12:00:00 +0200</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2010-07-09 15:40:27 +0200</ts:date>
+  </entry:entered>
+  <entry:description>Beer</entry:description>
+  <entry:qty>2000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>10000000/1000000</entry:i-price>
+  <entry:invoice type="guid">eaa069411f46260c90db6d852984861d</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">43b45b9376243f2669758cc4b7deae5e</entry:guid>
+  <entry:date>
+    <ts:date>2010-07-09 12:00:00 +0200</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2010-07-09 13:16:08 +0200</ts:date>
+  </entry:entered>
+  <entry:description>Legion</entry:description>
+  <entry:qty>2000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>10000000000/1000000</entry:i-price>
+  <entry:invoice type="guid">a96b54870cbe6060c270b2652d35e710</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">39a813f604ebccc4abd3cc0a78c40c0f</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:12:27 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, posttax percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>POSTTAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">61ca0fab81f70c5384b42dbadf8302ce</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:14:30 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes, posttax value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>POSTTAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">ee4c70d967b0f91f49ded26d578ab6eb</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:08:40 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, pretax value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">23abe4dcbfbadf6761f7e46c14a63aad</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:01:49 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, without discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">57fda35d12aa75708c29fcf7d84e1262</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:07:23 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, pretax percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">e834556f473510e826b0fd292de5a59e</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:03:54 +0100</ts:date>
+  </entry:entered>
+  <entry:description>Without taxes, with value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>0</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">a56fe2c2a7adc4ee99312ce9139d83b9</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:08:17 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes, pretax percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">4aa395e4642fa95dfccc5542b7aa7631</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:13:17 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, posttax value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>POSTTAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">45e9da1003a068299bdf7e52dfadb663</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:09:23 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes, pretax value discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>VALUE</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">5cec35bbc9d74415c835c11d5fd27397</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:01:30 +0100</ts:date>
+  </entry:entered>
+  <entry:description>Without taxes and discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>0</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">7461d2f73e7147323918d925af607f08</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:10:17 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With excluded taxes, sametime percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>SAMETIME</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">bb91b44d60af709bf63bb7600c876f3e</entry:guid>
+  <entry:date>
+    <ts:date>2010-07-09 12:00:00 +0200</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2010-07-09 13:17:59 +0200</ts:date>
+  </entry:entered>
+  <entry:description>Wine from Crassus for Caesars Legions</entry:description>
+  <entry:qty>10000000000/1000000</entry:qty>
+  <entry:b-acct type="guid">fda0613b3a2339508b21d72b234ca184</entry:b-acct>
+  <entry:b-price>500000/1000000</entry:b-price>
+  <entry:bill type="guid">412a79664af3e15cfa481db82459773a</entry:bill>
+  <entry:billable>0</entry:billable>
+  <entry:b-taxable>1</entry:b-taxable>
+  <entry:b-taxincluded>0</entry:b-taxincluded>
+  <entry:b-pay>CASH</entry:b-pay>
+  <entry:b-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:b-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">799275323663eb1b5fa39350e50ecce5</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:04:46 +0100</ts:date>
+  </entry:entered>
+  <entry:description>With included taxes</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>1</entry:i-taxable>
+  <entry:i-taxincluded>1</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">86c17026397d66a67eb3fd828855dded</entry:guid>
+  <entry:date>
+    <ts:date>2008-02-22 12:00:00 +0100</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2008-02-22 21:02:22 +0100</ts:date>
+  </entry:entered>
+  <entry:description>Without taxes, with percent discount</entry:description>
+  <entry:action>Auftrag</entry:action>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:i-acct type="guid">4d2fcc962790dc4119e409d1f8c7dd51</entry:i-acct>
+  <entry:i-price>100000000/1000000</entry:i-price>
+  <entry:i-discount>5000000/1000000</entry:i-discount>
+  <entry:invoice type="guid">31cf0c86220ec3ef67be360f8c4416fb</entry:invoice>
+  <entry:i-disc-type>PERCENT</entry:i-disc-type>
+  <entry:i-disc-how>PRETAX</entry:i-disc-how>
+  <entry:i-taxable>0</entry:i-taxable>
+  <entry:i-taxincluded>0</entry:i-taxincluded>
+  <entry:i-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:i-taxtable>
+</gnc:GncEntry>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">c2a72709d80c5fc605615b26350a2b8f</entry:guid>
+  <entry:date>
+    <ts:date>2010-07-09 12:00:00 +0200</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2010-07-09 13:12:11 +0200</ts:date>
+  </entry:entered>
+  <entry:description>Wine</entry:description>
+  <entry:qty>10000000/1000000</entry:qty>
+  <entry:b-acct type="guid">fda0613b3a2339508b21d72b234ca184</entry:b-acct>
+  <entry:b-price>10000000/1000000</entry:b-price>
+  <entry:bill type="guid">feef793eae7001905aa1976469b1304e</entry:bill>
+  <entry:billable>0</entry:billable>
+  <entry:b-taxable>1</entry:b-taxable>
+  <entry:b-taxincluded>0</entry:b-taxincluded>
+  <entry:b-pay>CASH</entry:b-pay>
+  <entry:b-taxtable type="guid">1b1a9e78db87ffa07886abe977011995</entry:b-taxtable>
+</gnc:GncEntry>
+<gnc:GncVendor version="2.0.0">
+  <vendor:guid type="guid">6b5ef6b315fb583cfc994d0857dc62cf</vendor:guid>
+  <vendor:name>Crassus</vendor:name>
+  <vendor:id>000001</vendor:id>
+  <vendor:addr version="2.0.0">
+    <addr:name>Marcus Licinius Crassus</addr:name>
+    <addr:addr1>Aventin 9</addr:addr1>
+    <addr:addr2>Rome</addr:addr2>
+  </vendor:addr>
+  <vendor:taxincluded>USEGLOBAL</vendor:taxincluded>
+  <vendor:active>1</vendor:active>
+  <vendor:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </vendor:currency>
+  <vendor:use-tt>0</vendor:use-tt>
+</gnc:GncVendor>
+</gnc:book>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

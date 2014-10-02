@@ -1,0 +1,46 @@
+## Sample configuration file for gcinvoice
+##
+## These are the default values used by gcinvoice, except for entries marked
+## '(not set)' which are not set at all as default.
+
+[GENERAL]
+
+# logname = gcinvoice
+# loglevel = 5   # (not set)
+
+## input
+gcfile = gcdata.xml
+
+## Options to format monetary and other values
+# quantities_uselocale = 1
+# currency_uselocale = 1
+# quantities_precision = 2   # (not set)
+# currency_precision = 2     # (not set)
+# quantities_dashsymb = -    # (not set)
+
+## regular expression for the template engine
+## special characters have to be escaped in order to get passed correctly.
+#regex_rex = '@\\{([^}]+)\\}'    # e.g. @{3 * amount_gross}
+#regex_rbe = '%\\+'              # e.g. %+ for e in entries:
+#regex_ren = '%-'                # e.g. %- (empty line as end marker)
+#regex_rco = '%='                # e.g. %= else:
+
+[TEMPLATES]
+
+## the default template file
+## the file names can be templates.
+# default = invoice@{owner}@_template.tex
+default = invoice_template.tex
+
+## these map 'owner/name' entries in invoices to template files.
+#customer1 = specialinvoice_template.tex # (not set)
+
+[OUTFILES]
+
+## the default output file; if not given, stdout is used as default
+## the file names can be templates
+#default = invoice@{id}.tex   # (not set)
+#default = invoice_@{date_posted.strftime("%Y-%m")}.tex   # (not set)
+
+## these map 'owner/name' entries in invoices to output files.
+#customer1 = specialinvoice.tex   # (not set)
