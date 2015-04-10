@@ -1,4 +1,4 @@
-\documentclass[paper=a4,fontsize=11pt,DIV=12]{scrlttr2}
+\documentclass[paper=a4,fontsize=11pt,DIV=12, margin=1cm, footskip=10pt]{scrlttr2}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage[gen]{eurosym}
@@ -8,6 +8,7 @@
 \usepackage{dcolumn}
 \usepackage{booktabs}
 \usepackage[ngerman]{babel}
+
 
 \LoadLetterOption{DINmtext}
 \KOMAoptions{enlargefirstpage=true,fromalign=right,fromphone=true,fromemail=true,backaddress=true,parskip=half*}
@@ -19,6 +20,11 @@
   }
 \setkomavar{fromphone}{+41 55 612 20 54}
 \setkomavar{fromemail}{niklaus.giger@member.fsf.org}
+\makeatletter
+%\@setplength{sigindent}{0pt}
+\renewcommand\raggedsignature{\raggedright}
+\makeatother
+\usepackage{lipsum}
 
 \begin{document}
 
