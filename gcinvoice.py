@@ -268,7 +268,7 @@ class Gcinvoice(object):
             try:
                 invcdict['guid'] = invc.findtext(ns('invoice:guid'))
                 invcdict['id'] = intid(invc.findtext(ns('invoice:id')))
-                invcdict['billing_id'] = invc.findtext(ns('invc:billing_id'))
+                invcdict['billing_id'] = invc.findtext(ns('invoice:billing_id'))
                 invcdict['job'] = None
                 ownerguid = invc.findtext(ns('invoice:owner/owner:id'))
                 ownertype = invc.findtext(ns('invoice:owner/owner:type'))
