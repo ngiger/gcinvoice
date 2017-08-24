@@ -551,7 +551,7 @@ class TestMain(unittest.TestCase):
                 'date_posted': datetime.date(2010, 7, 9), 'currency': 'EUR',
                 'job': None, 'date_opened': datetime.date(2010, 7, 9),
                 'owner': self.gc.vendors['6b5ef6b315fb583cfc994d0857dc62cf'],
-                'billing_id': None, 'guid': 'feef793eae7001905aa1976469b1304e',
+                'billing_id': '987', 'guid': 'feef793eae7001905aa1976469b1304e',
                 'id': 2},
             3: {
                 'terms': self.gc.terms['d1f7440a38bceede661256a9bb5639c7'],
@@ -570,7 +570,7 @@ class TestMain(unittest.TestCase):
                 'job': self.gc.jobs['0568d5e3911c33eb8761f9177554d10e'],
                 'date_opened': datetime.date(2010, 7, 9), 'id': 4,
                 'owner': self.gc.vendors['6b5ef6b315fb583cfc994d0857dc62cf'],
-                'billing_id': None, 'guid': '412a79664af3e15cfa481db82459773a'},
+                'billing_id': '010203', 'guid': '412a79664af3e15cfa481db82459773a'},
             5: {
                 'terms': self.gc.terms['d1f7440a38bceede661256a9bb5639c7'],
                 'notes': 'Some beer', 'entries': [
@@ -579,7 +579,7 @@ class TestMain(unittest.TestCase):
                 'date_posted': datetime.date(2010, 7, 9), 'currency': 'EUR',
                 'job': None, 'date_opened': datetime.date(2010, 7, 9),
                 'owner': self.gc.customers['ec6e7eca10bf375752b74aaab55cd75c'],
-                'billing_id': None, 'guid': 'eaa069411f46260c90db6d852984861d',
+                'billing_id': '445', 'guid': 'eaa069411f46260c90db6d852984861d',
                 'id': 5},
             })
         for t in self.gc.taxtables.itervalues():
