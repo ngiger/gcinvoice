@@ -35,6 +35,6 @@ can also be run as a script.
           'Programming Language :: Python',
           'Topic :: Office/Business :: Financial :: Accounting',
           ],
-      py_modules=['gcinvoice'],
+      py_modules=['gcinvoice', 'yaptu'],
       scripts=['gcinvoice.py'],
       )

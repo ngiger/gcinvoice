@@ -14,6 +14,7 @@ import datetime
 import optparse
 import unittest
 import doctest
+from yaptu import copier
 
 import gcinvoice
 
@@ -163,8 +164,8 @@ class TestYaptu(unittest.TestCase):
         testdata_in = io.open(
             'testdata/yaptu_testYaptu_in.txt', 'r', encoding='utf-8').read()
         templ_in = [(line+'\n') for line in testdata_in.split('\n')]
-        yaptu = gcinvoice._copier(rex, temp_dict, rbe, ren, rco,
-                                  ouf=templ_out, encoding='utf-8')
+        yaptu = copier(rex, temp_dict, rbe, ren, rco,
+                       ouf=templ_out, encoding='utf-8')
         yaptu.copy(templ_in)
         result = templ_out.getvalue()
         templ_out.close()
