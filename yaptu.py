@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This is the Yet Another Python Templating Utility, Version 1.2
 # Taken from the ActiveState python Cookbook recipe 52305
 # by Alex Martelli (https://github.com/ActiveState/)

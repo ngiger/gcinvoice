@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Tests for the gcinvoice module.
 
 Run this module as script to perform all tests.
