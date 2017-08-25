@@ -1,0 +1,17 @@
+id = @{id} | owner = @{owner['name']} | currency = @{ currency}
+notes = @{ notes}
+date_opened = @{ date_opened.strftime('%Y-%m-%d') }
+date_posted = @{ date_posted.strftime('%Y-%m-%d') }
+terms name = @{terms['name']}
+terms disc-days = @{terms['disc-days']}
+terms discount = @{terms['discount']}
+terms due-days = @{terms['due-days']}
+terms desc = @{terms['desc']}
+amount_net_ = @{amount_net_ }
+amount_net = @{amount_net }
+amount_gross_ = @{amount_gross_}
+amount_gross = @{amount_gross}
+amount_taxes_ = @{amount_taxes_}
+amount_taxes = @{amount_taxes}
+Currency format test: @{cformat(Decimal("1.0000")/Decimal(2))}
+Quantity format test: @{qformat(Decimal("1.0000")/Decimal(2))}

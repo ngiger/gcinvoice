@@ -4,12 +4,12 @@ Run this module as script to perform all tests.
 
 """
 
+import io
 import sys
 import subprocess
 import re
 from decimal import Decimal
 import StringIO
-import textwrap
 import datetime
 import optparse
 import unittest
@@ -30,31 +30,11 @@ suite = unittest.TestSuite()
 
 
 # First add the doctests from the modules.
-
 suite.addTest(doctest.DocTestSuite(gcinvoice))
 
 
 # Some input data needed in various tests.
-
-template = textwrap.dedent(u"""\
-    id = @{id} | owner = @{owner['name']} | currency = @{ currency}
-    notes = @{ notes}
-    date_opened = @{ date_opened.strftime('%Y-%m-%d') }
-    date_posted = @{ date_posted.strftime('%Y-%m-%d') }
-    terms name = @{terms['name']}
-    terms disc-days = @{terms['disc-days']}
-    terms discount = @{terms['discount']}
-    terms due-days = @{terms['due-days']}
-    terms desc = @{terms['desc']}
-    amount_net_ = @{amount_net_ }
-    amount_net = @{amount_net }
-    amount_gross_ = @{amount_gross_}
-    amount_gross = @{amount_gross}
-    amount_taxes_ = @{amount_taxes_}
-    amount_taxes = @{amount_taxes}
-    Currency format test: @{cformat(Decimal("1.0000")/Decimal(2))}
-    Quantity format test: @{qformat(Decimal("1.0000")/Decimal(2))}
-    """)
+template = io.open('testdata/template_in.txt', 'r', encoding='utf-8').read()
 
 
 # The tests
@@ -180,47 +160,18 @@ class TestYaptu(unittest.TestCase):
         temp_dict = {'a': 'a1', 'b': u'\u01222', 'c': 5, 'li': [5, 4, 3],
                      'di': dict(x=1, y=2)}
         templ_out = StringIO.StringIO()
-        templ_in = [(line+'\n') for line in textwrap.dedent(
-                u"""\
-                a = @{a}
-                b = @{ b }
-                c+5 = @{ c + 5  }
-                Some unicode: \u0122
-                %+ for ind,x in enumerate(li):
-                item @{ ind} of li is @{x}
-                %= else:
-                Finished the loop.
-                %-
-                %+ if c > 3:
-                c is greater than 3
-                %= else:
-                c is not greater than 3
-                %-
-                %+ if c > 6:
-                c is greater than 6
-                %= else:
-                c is not greater than 6
-                %-
-                """).split('\n')]
+        testdata_in = io.open(
+            'testdata/yaptu_testYaptu_in.txt', 'r', encoding='utf-8').read()
+        templ_in = [(line+'\n') for line in testdata_in.split('\n')]
         yaptu = gcinvoice._copier(rex, temp_dict, rbe, ren, rco,
                                   ouf=templ_out, encoding='utf-8')
         yaptu.copy(templ_in)
         result = templ_out.getvalue()
         templ_out.close()
-        self.assertEqual(result, textwrap.dedent(
-                """\
-                a = a1
-                b = \xc4\xa22
-                c+5 = 10
-                Some unicode: \xc4\xa2
-                item 0 of li is 5
-                item 1 of li is 4
-                item 2 of li is 3
-                Finished the loop.
-                c is greater than 3
-                c is not greater than 6
-
-                """))
+        testdata_out = io.open(
+            'testdata/yaptu_testYaptu_out.txt', 'r',
+            encoding='utf-8').read().encode('utf-8')
+        self.assertEqual(result, testdata_out)
 
 
 suite.addTest(unittest.makeSuite(TestYaptu))
@@ -621,26 +572,10 @@ class TestMain(unittest.TestCase):
         self.gc.createInvoice(1, outfile=outf, template=template)
         result = outf.getvalue()
         outf.close()
-        self.assertEqual(result, textwrap.dedent(u"""\
-                id = 1 | owner = Caesar | currency = EUR
-                notes = Items delivered in March
-                date_opened = 2008-02-22
-                date_posted = 2008-02-22
-                terms name = Standard
-                terms disc-days = 10
-                terms discount = 5
-                terms due-days = 30
-                terms desc = 
-                amount_net_ = 14769.23076923076923076923077
-                amount_net = 14769.231
-                amount_gross_ = 19045.46153846153846153846154
-                amount_gross = 19045.462
-                amount_taxes_ = 4276.230769230769230769230769
-                amount_taxes = 4276.231
-                Currency format test: 0.500
-                Quantity format test: 0.5
+        self.assertEqual(result, io.open(
+            'testdata/main_createInvoice1_out.txt', 'r',
+            encoding='utf-8').read().encode('utf-8'))
 
-                """).encode('utf-8'))
         if test_locale:
             self.gc.options.quantities_uselocale = True
             self.gc.options.currency_uselocale = True
@@ -648,26 +583,9 @@ class TestMain(unittest.TestCase):
             self.gc.createInvoice(1, outfile=outf, template=template)
             result = outf.getvalue()
             outf.close()
-            self.assertEqual(result, textwrap.dedent(u"""\
-                    id = 1 | owner = Caesar | currency = EUR
-                    notes = Items delivered in March
-                    date_opened = 2008-02-22
-                    date_posted = 2008-02-22
-                    terms name = Standard
-                    terms disc-days = 10
-                    terms discount = 5
-                    terms due-days = 30
-                    terms desc = 
-                    amount_net_ = 14769.23076923076923076923077
-                    amount_net = 14.769,23
-                    amount_gross_ = 19045.46153846153846153846154
-                    amount_gross = 19.045,46
-                    amount_taxes_ = 4276.230769230769230769230769
-                    amount_taxes = 4.276,23
-                    Currency format test: 0,50
-                    Quantity format test: 0,5
-
-                    """).encode('utf-8'))
+            self.assertEqual(result, io.open(
+                'testdata/main_createInvoice2_out.txt', 'r',
+                encoding='utf-8').read().encode('utf-8'))
 
         def cformat(val):
             return u"dummy"
@@ -678,26 +596,9 @@ class TestMain(unittest.TestCase):
         self.gc.createInvoice(1, outfile=outf, template=template)
         result = outf.getvalue()
         outf.close()
-        self.assertEqual(result, textwrap.dedent(u"""\
-                id = 1 | owner = Caesar | currency = EUR
-                notes = Items delivered in March
-                date_opened = 2008-02-22
-                date_posted = 2008-02-22
-                terms name = Standard
-                terms disc-days = 10
-                terms discount = 5
-                terms due-days = 30
-                terms desc = 
-                amount_net_ = 14769.23076923076923076923077
-                amount_net = dummy
-                amount_gross_ = 19045.46153846153846153846154
-                amount_gross = dummy
-                amount_taxes_ = 4276.230769230769230769230769
-                amount_taxes = dummy
-                Currency format test: dummy
-                Quantity format test: 0.5
-
-                """).encode('utf-8'))
+        self.assertEqual(result, io.open(
+            'testdata/main_createInvoice3_out.txt', 'r',
+            encoding='utf-8').read().encode('utf-8'))
 
 
 suite.addTest(unittest.makeSuite(TestMain))
@@ -722,26 +623,9 @@ class TestScript(unittest.TestCase):
                                 options=options)
         result = outf.getvalue()
         outf.close()
-        self.assertEqual(result, textwrap.dedent(u"""\
-                id = 1 | owner = Caesar | currency = EUR
-                notes = Items delivered in March
-                date_opened = 2008-02-22
-                date_posted = 2008-02-22
-                terms name = Standard
-                terms disc-days = 10
-                terms discount = 5
-                terms due-days = 30
-                terms desc = 
-                amount_net_ = 14769.23076923076923076923077
-                amount_net = 14769.231
-                amount_gross_ = 19045.46153846153846153846154
-                amount_gross = 19045.462
-                amount_taxes_ = 4276.230769230769230769230769
-                amount_taxes = 4276.231
-                Currency format test: 0.500
-                Quantity format test: 0.5
-
-                """).encode('utf-8'))
+        self.assertEqual(result, io.open(
+            'testdata/script_createInvoice_out.txt', 'r',
+            encoding='utf-8').read().encode('utf-8'))
 
     def testScriptrun(self):
         """Test of running gcinvoice as a script."""
@@ -753,83 +637,8 @@ class TestScript(unittest.TestCase):
             cmd.split(), stdout=subprocess.PIPE,
             env=dict(LC_ALL='de_DE.UTF-8')).communicate()
 
-        self.assertEqual(stdout, ur"""\documentclass[paper=a4,fontsize=11pt,DIV=12]{scrlttr2}
-\u005Cusepackage[T1]{fontenc}
-\u005Cusepackage{lmodern}
-\u005Cusepackage[gen]{eurosym}
-\u005Cusepackage{ucs}
-\u005Cusepackage[utf8x]{inputenc}
-\u005Cusepackage{microtype}
-\u005Cusepackage{dcolumn}
-\u005Cusepackage{booktabs}
-\u005Cusepackage[english]{babel}
-
-\LoadLetterOption{DINmtext}
-\KOMAoptions{enlargefirstpage=true,fromalign=right,fromphone=true,fromemail=true,backaddress=true,parskip=half*}
-
-\setkomavar{fromname}{Kleopatra}
-\setkomavar{fromaddress}{%
-  Brucheion\\
-  Alexandria
-  }
-\setkomavar{fromphone}{+987654321}
-\setkomavar{fromemail}{foo@invalid.invalid}
-
-\begin{document}
-
-\begin{letter}{To\\
-  Gaius Julius Caesar\\
-    Palatin 7\\
-    Rome\\
-}
-
-\setkomavar{subject}{%
-  Items delivered in March}
-\setkomavar{invoice}{1}
-
-\opening{Dear user of gcinvoice,}
-
-this invoice template demonstrates some features of gcinvoice, and is also used
-by the test suite.
-The \emph{special discount} demonstrates that arbitrary python expressions can be
-used.
-It also shows how to calculate and format numbers.
-Prices are in \u20ac.
-
-\begin{tabular}[t]{D{,}{,}{2}p{22em}D{,}{,}{2}D{,}{,}{2}D{,}{,}{2}D{,}{,}{2}}
-  \multicolumn{1}{c}{Quantity} &	Item &	\multicolumn{1}{c}{Price} &
-  \multicolumn{1}{c}{Discount} &      \multicolumn{1}{c}{Taxes} &      \multicolumn{1}{c}{Amount}\\ \midrule
-10 &   Without taxes and discount &   100,00 & 0,00 & 0,00 &   1.000,00 \\
-10 &   With excluded taxes, without discount &   100,00 & 0,00 & 350,00 &   1.000,00 \\
-10 &   Without taxes, with percent discount &   100,00 & 50,00 & 0,00 &   950,00 \\
-10 &   Without taxes, with value discount &   100,00 & 5,00 & 0,00 &   995,00 \\
-10 &   With included taxes &   100,00 & 0,00 & 269,23 &   730,77 \\
-10 &   With excluded taxes, pretax percent discount &   100,00 & 50,00 & 335,00 &   950,00 \\
-10 &   With included taxes, pretax percent discount &   100,00 & 36,54 & 258,27 &   694,23 \\
-10 &   With excluded taxes, pretax value discount &   100,00 & 5,00 & 348,50 &   995,00 \\
-10 &   With included taxes, pretax value discount &   100,00 & 5,00 & 267,73 &   725,77 \\
-10 &   With excluded taxes, sametime percent discount &   100,00 & 50,00 & 350,00 &   950,00 \\
-10 &   With included taxes, sametime percent discount &   100,00 & 36,54 & 269,23 &   694,23 \\
-10 &   With excluded taxes, sametime value discount &   100,00 & 5,00 & 350,00 &   995,00 \\
-10 &   With included taxes, sametime value discount &   100,00 & 5,00 & 269,23 &   725,77 \\
-10 &   With excluded taxes, posttax percent discount &   100,00 & 67,50 & 334,42 &   948,08 \\
-10 &   With included taxes, posttax percent discount &   100,00 & 50,00 & 257,69 &   692,31 \\
-10 &   With excluded taxes, posttax value discount &   100,00 & 5,00 & 348,85 &   996,15 \\
-10 &   With included taxes, posttax value discount &   100,00 & 5,00 & 268,08 &   726,92 \\
-\midrule
-     &	Net amount &		&       &       &	14.769,23\\
-     &	+ Taxes &	&       &       &	4.276,23 \\ \cmidrule{6-6}
-     &	Gross amount &		&       &       &	19.045,46 \\
-     &	\multicolumn{2}{l}{my special discount (not in Gnucash)} &      &   &	1.476,92 \\ \cmidrule{6-6}
-     &	Final amount &  &       &	& 17.568,54
-\end{tabular}
-
-\closing{Best Regards}
-
-\end{letter}
-
-\end{document}
-""".encode('utf-8'))
+        self.assertEqual(stdout, io.open(
+            'testdata/script_scriptrun_out.tex').read().encode('utf-8'))
 
 
 suite.addTest(unittest.makeSuite(TestScript))
