@@ -22,8 +22,8 @@ try:
     locale.setlocale(locale.LC_ALL, 'de_DE.UTF-8')
     test_locale = True
 except locale.Error:
-    print "Using module 'locale' for number formatting will not be tested"
-    print "because the locale 'de_DE.UTF-8' is not avaible"
+    print("Using module 'locale' for number formatting will not be tested")
+    print("because the locale 'de_DE.UTF-8' is not avaible")
     test_locale = False
 
 suite = unittest.TestSuite()
@@ -74,52 +74,52 @@ class TestFuncs(unittest.TestCase):
             'gcfile': 'gcdata.xml'})
         opt.foobar = 'foobar'
         opt, files = gcinvoice._parse_configfiles(configfiles=['gcinvoicerc'],
-                options=opt)
+                                                  options=opt)
         self.assertEqual(files, ['gcinvoicerc'])
         self.assertEqual(opt.__dict__, {
             'templates': {'default': 'invoice_template.tex'}, 'outfiles': {},
             'gcfile': 'gcdata.xml', 'foobar': 'foobar'})
-        
+
     def testReadnumber(self):
         """Test reading of rational numbers."""
         self.assertEqual(gcinvoice._readnumber('3/4'), Decimal("0.75"))
         self.assertRaises(AttributeError, gcinvoice._readnumber, 1)
         self.assertRaises(ValueError, gcinvoice._readnumber, '1')
         self.assertRaises(AttributeError, gcinvoice._readnumber, None)
-        
+
     def testReaddate(self):
         """Test reading of dates."""
         self.assertEqual(gcinvoice._readdate('2002-12-01 00:00:00 +0100'),
-                datetime.date(2002, 12, 1))
+                         datetime.date(2002, 12, 1))
         self.assertEqual(gcinvoice._readdate('2002-12-01 00:00:00'),
-                datetime.date(2002, 12, 1))
+                         datetime.date(2002, 12, 1))
         self.assertEqual(gcinvoice._readdate('2002-12-01 03:00:00'),
-                datetime.date(2002, 12, 1))
+                         datetime.date(2002, 12, 1))
         self.assertEqual(gcinvoice._readdate(None), None)
         self.assertRaises(IndexError, gcinvoice._readdate, '')
-        
+
     def testReaddatetime(self):
         """Test reading of datetimes."""
         self.assertEqual(gcinvoice._readdatetime('2002-12-01 11:22:33 +0100'),
-                datetime.datetime(2002, 12, 1, 11, 22, 33))
+                         datetime.datetime(2002, 12, 1, 11, 22, 33))
         self.assertRaises(ValueError, gcinvoice._readdatetime,
-                '2002-12-01 11:22:33')
+                          '2002-12-01 11:22:33')
         self.assertEqual(gcinvoice._readdatetime(None), None)
         self.assertRaises(IndexError, gcinvoice._readdatetime, '')
-        
+
     def testCurrencyformatting(self):
         """Test formatting of monetary values."""
         self.assertEqual(gcinvoice._currencyformatting(Decimal("12.34567"),
-            uselocale=False), u'12.34567')
+                         uselocale=False), u'12.34567')
         self.assertEqual(gcinvoice._currencyformatting(Decimal("12.34567"),
-            uselocale=False, precision=3), u'12.346')
+                         uselocale=False, precision=3), u'12.346')
         self.assertEqual(gcinvoice._currencyformatting(Decimal("12.00000"),
-            uselocale=False), u'12.00000')
+                         uselocale=False), u'12.00000')
         self.assertEqual(gcinvoice._currencyformatting(Decimal("12.00000"),
-            uselocale=False, precision=3), u'12.000')
+                         uselocale=False, precision=3), u'12.000')
         if test_locale:
             self.assertEqual(gcinvoice._currencyformatting(Decimal("12.34567"),
-                uselocale=True), u'12,35')
+                             uselocale=True), u'12,35')
             self.assertEqual(gcinvoice._currencyformatting(
                 Decimal("8912.34567"), uselocale=True), u'8.912,35')
             self.assertEqual(gcinvoice._currencyformatting(
@@ -133,20 +133,20 @@ class TestFuncs(unittest.TestCase):
             self.assertEqual(gcinvoice._currencyformatting(
                 Decimal("8912.00000"), uselocale=True,
                 dashsymb=u'\u0562~\u0122'), u'8.912,\u0562~\u0122')
-        
+
     def testQuantityformatting(self):
         """Test formatting of quantity values."""
         self.assertEqual(gcinvoice._quantityformatting(Decimal("12.34567"),
-            uselocale=False), u'12.34567')
+                         uselocale=False), u'12.34567')
         self.assertEqual(gcinvoice._quantityformatting(Decimal("12.34567"),
-            uselocale=False, precision=3), u'12.346')
+                         uselocale=False, precision=3), u'12.346')
         self.assertEqual(gcinvoice._quantityformatting(Decimal("12.00000"),
-            uselocale=False), u'12.00000')
+                         uselocale=False), u'12.00000')
         self.assertEqual(gcinvoice._quantityformatting(Decimal("12.00000"),
-            uselocale=False, precision=3), u'12.000')
+                         uselocale=False, precision=3), u'12.000')
         if test_locale:
             self.assertEqual(gcinvoice._quantityformatting(Decimal("12.34567"),
-                uselocale=True), u'12,34567')
+                             uselocale=True), u'12,34567')
             self.assertEqual(gcinvoice._quantityformatting(
                 Decimal("8912.34567"), uselocale=True), u'8.912,34567')
             self.assertEqual(gcinvoice._quantityformatting(
@@ -161,13 +161,14 @@ class TestFuncs(unittest.TestCase):
                 Decimal("8912.00000"), uselocale=True,
                 dashsymb=u'\u0562~\u0122'), u'8.912,\u0562~\u0122')
 
+
 suite.addTest(unittest.makeSuite(TestFuncs))
 
 
 class TestYaptu(unittest.TestCase):
 
     """Test of the YAPTU templating engine.
-    
+
     """
 
     def testYaptu(self):
@@ -176,8 +177,8 @@ class TestYaptu(unittest.TestCase):
         rbe = re.compile('%\\+ ')
         ren = re.compile('%-')
         rco = re.compile('%= ')
-        temp_dict = {'a': 'a1', 'b': u'\u01222', 'c': 5, 'li': [5,4,3],
-                'di': dict(x=1, y=2)}
+        temp_dict = {'a': 'a1', 'b': u'\u01222', 'c': 5, 'li': [5, 4, 3],
+                     'di': dict(x=1, y=2)}
         templ_out = StringIO.StringIO()
         templ_in = [(line+'\n') for line in textwrap.dedent(
                 u"""\
@@ -202,7 +203,7 @@ class TestYaptu(unittest.TestCase):
                 %-
                 """).split('\n')]
         yaptu = gcinvoice._copier(rex, temp_dict, rbe, ren, rco,
-                ouf=templ_out, encoding='utf-8')
+                                  ouf=templ_out, encoding='utf-8')
         yaptu.copy(templ_in)
         result = templ_out.getvalue()
         templ_out.close()
@@ -220,6 +221,7 @@ class TestYaptu(unittest.TestCase):
                 c is not greater than 6
 
                 """))
+
 
 suite.addTest(unittest.makeSuite(TestYaptu))
 
@@ -240,12 +242,12 @@ class TestMain(unittest.TestCase):
         self.assertEqual(self.gc.customers, {
             'ec6e7eca10bf375752b74aaab55cd75c': {
                 'guid': 'ec6e7eca10bf375752b74aaab55cd75c',
-                'name': 'Caesar', 'id': 1,'full_name': 'Gaius Julius Caesar',
+                'name': 'Caesar', 'id': 1, 'full_name': 'Gaius Julius Caesar',
                 'address': ['Palatin 7', 'Rome']}})
         self.assertEqual(self.gc.vendors, {
             '6b5ef6b315fb583cfc994d0857dc62cf': {
                 'guid': '6b5ef6b315fb583cfc994d0857dc62cf',
-                'name': 'Crassus', 'id': 1,'full_name':
+                'name': 'Crassus', 'id': 1, 'full_name':
                 'Marcus Licinius Crassus', 'address': ['Aventin 9', 'Rome']}})
         self.assertEqual(self.gc.terms, {
             'cf9e15a66f6414cda27c0c78449f4bce': {
@@ -292,7 +294,7 @@ class TestMain(unittest.TestCase):
                 'amount_gross': Decimal("950"), 'amount_raw': Decimal("1000"),
                 'discount_type': 'PERCENT', 'qty': Decimal("10"), 'taxable': 1,
                 'action': 'Auftrag',
-                'amount_net': Decimal("692.3076923076923076923076923"), 
+                'amount_net': Decimal("692.3076923076923076923076923"),
                 'amount_discount': Decimal("50"),
                 'date': datetime.date(2008, 2, 22),
                 'entered': datetime.datetime(2008, 2, 22, 21, 12, 52),
@@ -402,9 +404,12 @@ class TestMain(unittest.TestCase):
                 'date': datetime.date(2008, 2, 22),
                 'description': 'With excluded taxes, sametime value discount',
                 'discount_type': 'VALUE', 'price': Decimal("100"),
-                'amount_gross': Decimal("1345.0"), 'amount_net': Decimal("995"),
-                'amount_raw': Decimal("1000"), 'taxincluded': 0, 'discount': Decimal("5"),
-                'taxable': 1, 'entered': datetime.datetime(2008, 2, 22, 21, 11, 28),
+                'amount_gross': Decimal("1345.0"),
+                'amount_net': Decimal("995"),
+                'amount_raw': Decimal("1000"), 'taxincluded': 0,
+                'discount': Decimal("5"),
+                'taxable': 1,
+                'entered': datetime.datetime(2008, 2, 22, 21, 11, 28),
                 'qty': Decimal("10"), 'action': 'Auftrag',
                 'amount_taxes': Decimal("350.0"),
                 'taxtable':
@@ -418,7 +423,8 @@ class TestMain(unittest.TestCase):
                 'amount_net': Decimal("1000"), 'amount_raw': Decimal("1000"),
                 'discount': None, 'taxable': 0,
                 'entered': datetime.datetime(2008, 2, 22, 21, 1, 30),
-                'qty': Decimal("10"), 'action': 'Auftrag', 'amount_taxes': Decimal("0")},
+                'qty': Decimal("10"), 'action': 'Auftrag',
+                'amount_taxes': Decimal("0")},
             '39a813f604ebccc4abd3cc0a78c40c0f': {
                 'amount_discount': Decimal("67.5"), 'discount_how': 'POSTTAX',
                 'guid': '39a813f604ebccc4abd3cc0a78c40c0f',
@@ -438,11 +444,15 @@ class TestMain(unittest.TestCase):
                 'amount_discount': Decimal("50"), 'discount_how': 'SAMETIME',
                 'guid': '7461d2f73e7147323918d925af607f08',
                 'date': datetime.date(2008, 2, 22),
-                'description': 'With excluded taxes, sametime percent discount',
+                'description': 'With excluded taxes, '
+                    'sametime percent discount',
                 'discount_type': 'PERCENT', 'price': Decimal("100"),
-                'amount_gross': Decimal("1300.0"), 'amount_net': Decimal("950"),
-                'amount_raw': Decimal("1000"), 'taxincluded': 0, 'discount': Decimal("5"),
-                'taxable': 1, 'entered': datetime.datetime(2008, 2, 22, 21, 10, 17),
+                'amount_gross': Decimal("1300.0"),
+                'amount_net': Decimal("950"),
+                'amount_raw': Decimal("1000"), 'taxincluded': 0,
+                'discount': Decimal("5"),
+                'taxable': 1,
+                'entered': datetime.datetime(2008, 2, 22, 21, 10, 17),
                 'qty': Decimal("10"), 'action': 'Auftrag',
                 'amount_taxes': Decimal("350.0"),
                 'taxtable':
@@ -453,7 +463,8 @@ class TestMain(unittest.TestCase):
                 'date': datetime.date(2008, 2, 22),
                 'description': 'With excluded taxes, without discount',
                 'price': Decimal("100"), 'amount_raw': Decimal("1000"),
-                'amount_net': Decimal("1000"), 'amount_gross': Decimal("1350.0"),
+                'amount_net': Decimal("1000"),
+                'amount_gross': Decimal("1350.0"),
                 'taxincluded': 0, 'discount': None, 'taxable': 1,
                 'entered': datetime.datetime(2008, 2, 22, 21, 1, 49),
                 'qty': Decimal("10"), 'action': 'Auftrag',
@@ -465,7 +476,8 @@ class TestMain(unittest.TestCase):
                 'discount_how': 'SAMETIME',
                 'guid': '83b794c691503074e6f5841967a00968',
                 'date': datetime.date(2008, 2, 22),
-                'description': 'With included taxes, sametime percent discount',
+                'description': 'With included taxes, '
+                    'sametime percent discount',
                 'discount_type': 'PERCENT', 'price': Decimal("100"),
                 'amount_gross': Decimal("963.4615384615384615384615385"),
                 'amount_net': Decimal("694.2307692307692307692307693"),
@@ -491,7 +503,8 @@ class TestMain(unittest.TestCase):
                 'amount_taxes': Decimal("268.0769230769230769230769231"),
                 'taxtable':
                     self.gc.taxtables['1b1a9e78db87ffa07886abe977011995']},
-            '43b45b9376243f2669758cc4b7deae5e': {'action': None,
+            '43b45b9376243f2669758cc4b7deae5e': {
+                'action': None,
                 'discount': None, 'amount_gross': Decimal("26050.0"),
                 'amount_net': Decimal("20000"), 'amount_raw': Decimal("20000"),
                 'amount_taxes': Decimal("6050.0"),
@@ -516,7 +529,7 @@ class TestMain(unittest.TestCase):
                     self.gc.taxtables['1b1a9e78db87ffa07886abe977011995']},
             })
         self.assertEqual(self.gc.invoices[1],
-                self.gc.invoices_['31cf0c86220ec3ef67be360f8c4416fb'])
+                         self.gc.invoices_['31cf0c86220ec3ef67be360f8c4416fb'])
         self.assertEqual(self.gc.invoices, {
             1: {
                 'guid': '31cf0c86220ec3ef67be360f8c4416fb',
@@ -551,7 +564,8 @@ class TestMain(unittest.TestCase):
                 'date_posted': datetime.date(2010, 7, 9), 'currency': 'EUR',
                 'job': None, 'date_opened': datetime.date(2010, 7, 9),
                 'owner': self.gc.vendors['6b5ef6b315fb583cfc994d0857dc62cf'],
-                'billing_id': '987', 'guid': 'feef793eae7001905aa1976469b1304e',
+                'billing_id': '987',
+                'guid': 'feef793eae7001905aa1976469b1304e',
                 'id': 2},
             3: {
                 'terms': self.gc.terms['d1f7440a38bceede661256a9bb5639c7'],
@@ -570,7 +584,8 @@ class TestMain(unittest.TestCase):
                 'job': self.gc.jobs['0568d5e3911c33eb8761f9177554d10e'],
                 'date_opened': datetime.date(2010, 7, 9), 'id': 4,
                 'owner': self.gc.vendors['6b5ef6b315fb583cfc994d0857dc62cf'],
-                'billing_id': '010203', 'guid': '412a79664af3e15cfa481db82459773a'},
+                'billing_id': '010203',
+                'guid': '412a79664af3e15cfa481db82459773a'},
             5: {
                 'terms': self.gc.terms['d1f7440a38bceede661256a9bb5639c7'],
                 'notes': 'Some beer', 'entries': [
@@ -579,7 +594,8 @@ class TestMain(unittest.TestCase):
                 'date_posted': datetime.date(2010, 7, 9), 'currency': 'EUR',
                 'job': None, 'date_opened': datetime.date(2010, 7, 9),
                 'owner': self.gc.customers['ec6e7eca10bf375752b74aaab55cd75c'],
-                'billing_id': '445', 'guid': 'eaa069411f46260c90db6d852984861d',
+                'billing_id': '445',
+                'guid': 'eaa069411f46260c90db6d852984861d',
                 'id': 5},
             })
         for t in self.gc.taxtables.itervalues():
@@ -652,6 +668,7 @@ class TestMain(unittest.TestCase):
                     Quantity format test: 0,5
 
                     """).encode('utf-8'))
+
         def cformat(val):
             return u"dummy"
         self.gc.options.quantities_uselocale = False
@@ -682,6 +699,7 @@ class TestMain(unittest.TestCase):
 
                 """).encode('utf-8'))
 
+
 suite.addTest(unittest.makeSuite(TestMain))
 
 
@@ -690,7 +708,7 @@ class TestScript(unittest.TestCase):
     """Tests for running gcinvoice as a script.
 
     """
-    
+
     def testCreateInvoice(self):
         """Test of the createInvoice function."""
         options = optparse.Values()
@@ -701,7 +719,7 @@ class TestScript(unittest.TestCase):
         options.currency_precision = 3
         outf = StringIO.StringIO()
         gcinvoice.createInvoice(1, template=template, outfile=outf,
-                options=options)
+                                options=options)
         result = outf.getvalue()
         outf.close()
         self.assertEqual(result, textwrap.dedent(u"""\
@@ -730,9 +748,10 @@ class TestScript(unittest.TestCase):
         if not test_locale:
             return
         cmd = "%s gcinvoice.py -g gcdata.xml -t invoice_template.tex 1" % \
-               (sys.executable,)
-        stdout,stderr = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-                env=dict(LC_ALL='de_DE.UTF-8')).communicate()
+            (sys.executable,)
+        stdout, stderr = subprocess.Popen(
+            cmd.split(), stdout=subprocess.PIPE,
+            env=dict(LC_ALL='de_DE.UTF-8')).communicate()
 
         self.assertEqual(stdout, ur"""\documentclass[paper=a4,fontsize=11pt,DIV=12]{scrlttr2}
 \u005Cusepackage[T1]{fontenc}
@@ -812,11 +831,12 @@ Prices are in \u20ac.
 \end{document}
 """.encode('utf-8'))
 
+
 suite.addTest(unittest.makeSuite(TestScript))
 
 
 # Run the tests
-    
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()
     runner.run(suite)

@@ -13,6 +13,7 @@ the only 3 names imported by 'import * from gcinvoice'.
 
 __version__ = '0.1.5'
 
+import locale
 import os
 import sys
 import copy
@@ -30,7 +31,7 @@ import ConfigParser
 from operator import itemgetter
 get0 = itemgetter(0)
 get_entered = itemgetter('entered')
-import locale
+
 locale.setlocale(locale.LC_ALL, '')
 try:
     import xml.etree.cElementTree as ET
@@ -56,7 +57,7 @@ class Gcinvoice(object):
     """
 
     configfiles = ['/etc/gcinvoicerc', os.path.expanduser('~/.gcinvoicerc'),
-            'gcinvoicerc']
+                   'gcinvoicerc']
 
     _xmlns_uris = {
             'gnc': "http://www.gnucash.org/XML/gnc",
@@ -78,7 +79,6 @@ class Gcinvoice(object):
     _xmlns_re = re.compile(r'([_a-z][-_a-z0-9]*):')
 
     _gcfile_encoding = 'utf-8'  # utf-8 seems to be used by Gnucash
-
 
     def __init__(self, options=None):
 
@@ -108,7 +108,7 @@ class Gcinvoice(object):
         if loglevel is not None:
             self.logger.setLevel(loglevel)
         self.logger.info("Parsed configuration files [%s], Gcinvoice instance "
-                "created" % ", ".join(parsed_files))
+                         "created" % ", ".join(parsed_files))
 
     def parse(self, gcfile=None):
         """Parse a Gnucash file.
@@ -160,7 +160,7 @@ class Gcinvoice(object):
                 self.customers[custdict['guid']] = custdict
             except Exception:
                 self.logger.warn("Problem parsing GncCustomer [%s]" %
-                        ET.tostring(cust), exc_info=True)
+                                 ET.tostring(cust), exc_info=True)
                 continue
 
         self.vendors = {}
@@ -182,7 +182,7 @@ class Gcinvoice(object):
                 self.vendors[vendordict['guid']] = vendordict
             except Exception:
                 self.logger.warn("Problem parsing GncVendor [%s]" %
-                        ET.tostring(vendor), exc_info=True)
+                                 ET.tostring(vendor), exc_info=True)
                 continue
 
         self.terms = {}
@@ -203,7 +203,7 @@ class Gcinvoice(object):
                 self.terms[termdict['guid']] = termdict
             except Exception:
                 self.logger.warn("Problem parsing GncBillTerm [%s]" %
-                        ET.tostring(term), exc_info=True)
+                                 ET.tostring(term), exc_info=True)
                 continue
 
         self.taxtables = {}
@@ -227,7 +227,7 @@ class Gcinvoice(object):
                             taxdict['value_sum'] += tedict['amount']
                         else:
                             self.logger.warn("Invalid tte:type [%s]" %
-                                    tedict['type'])
+                                             tedict['type'])
                             raise GcinvoiceError("Invalid tte:type")
                     except Exception:
                         self.logger.warn(
@@ -237,7 +237,7 @@ class Gcinvoice(object):
                     taxdict['entries'].append(tedict)
             except Exception:
                 self.logger.warn("Problem parsing GncTaxTable [%s]" %
-                        ET.tostring(tax), exc_info=True)
+                                 ET.tostring(tax), exc_info=True)
                 continue
             self.taxtables[taxdict['guid']] = taxdict
 
@@ -258,7 +258,7 @@ class Gcinvoice(object):
                 self.jobs[jobdict['guid']] = jobdict
             except Exception:
                 self.logger.warn("Problem parsing Gncjob [%s]" %
-                        ET.tostring(job), exc_info=True)
+                                 ET.tostring(job), exc_info=True)
                 continue
 
         self.invoices = {}
@@ -268,7 +268,8 @@ class Gcinvoice(object):
             try:
                 invcdict['guid'] = invc.findtext(ns('invoice:guid'))
                 invcdict['id'] = intid(invc.findtext(ns('invoice:id')))
-                invcdict['billing_id'] = invc.findtext(ns('invoice:billing_id'))
+                invcdict['billing_id'] = invc.findtext(
+                    ns('invoice:billing_id'))
                 invcdict['job'] = None
                 ownerguid = invc.findtext(ns('invoice:owner/owner:id'))
                 ownertype = invc.findtext(ns('invoice:owner/owner:type'))
@@ -291,7 +292,7 @@ class Gcinvoice(object):
                         ns('invoice:currency/cmdty:id'))
             except Exception:
                 self.logger.warn("Problem parsing GncInvoice [%s]" %
-                        ET.tostring(invc), exc_info=True)
+                                 ET.tostring(invc), exc_info=True)
                 continue
             invcdict['entries'] = []   # to be filled later parsing entries
             self.invoices[invcdict['id']] = invcdict
@@ -308,8 +309,9 @@ class Gcinvoice(object):
                     invoiceentries = self.invoices_[invoiceguid]['entries']
                 except KeyError:
                     self.logger.warn("Cannot find GncInvoice for guid [%s]"
-                            "refered in GncEntry [%s]" % (invoiceguid,
-                            ET.tostring(entry)), exc_info=True)
+                                     "refered in GncEntry [%s]" %
+                                     (invoiceguid, ET.tostring(entry)),
+                                     exc_info=True)
                     continue
                 entrydict = dict()
                 entrydict['guid'] = entry.findtext(ns('entry:guid'))
@@ -342,16 +344,17 @@ class Gcinvoice(object):
                             entrydict['taxtable'] = self.taxtables[taxtable]
                         except KeyError:
                             self.logger.warn("Cannot find GncTaxTable for guid"
-                                " [%s] refered in GncEntry [%s]" % (taxtable,
-                                ET.tostring(entry)), exc_info=True)
+                                             " [%s] refered in GncEntry [%s]" %
+                                             (taxtable, ET.tostring(entry)),
+                                             exc_info=True)
                             continue
             except Exception:
                 self.logger.warn("Problem parsing GncEntry [%s]" %
-                        ET.tostring(entry), exc_info=True)
+                                 ET.tostring(entry), exc_info=True)
                 continue
             try:
                 self._calcTaxDiscount(entrydict)
-            except GcinvoiceError, msg:
+            except GcinvoiceError as msg:
                 self.logger.error(msg)
                 continue
             if entrydict.get('_warndiscount', False):
@@ -363,8 +366,7 @@ class Gcinvoice(object):
             iv['entries'].sort(key=get_entered)
 
         self.logger.info("Successfully parsed Gnucash data file '%s'." %
-                gcfile)
-
+                         gcfile)
 
     def createInvoice(self, invoiceid, template=None, outfile=None):
         """Create an invoice from the parsed Gnucash data.
@@ -405,13 +407,14 @@ class Gcinvoice(object):
             invoice = self.invoices[invoiceid]
         except KeyError:
             self.logger.error("No invoice found for invoiceid [%s]" %
-                    invoiceid)
+                              invoiceid)
             raise GcinvoiceError("No invoice found for invoiceid [%s]" %
-                    invoiceid)
+                                 invoiceid)
         invc = copy.deepcopy(invoice)
         if invc.get('_warndiscount', False):
             self.logger.warn("The invoice contains POSTTAX discounts, which "
-                    "are calculated differenty in gcinvoice and Gnucash")
+                             "are calculated differenty in gcinvoice "
+                             "and Gnucash")
         invc['amount_net'] = sum(x['amount_net'] for x in invc['entries'])
         invc['amount_gross'] = sum(x['amount_gross'] for x in invc['entries'])
         invc['amount_taxes'] = sum(x['amount_taxes'] for x in invc['entries'])
@@ -438,7 +441,7 @@ class Gcinvoice(object):
             invc[x] = cformat(invc[x])
         for e in invc['entries']:
             for x in ['price', 'amount_raw', 'amount_net', 'amount_gross',
-                    'amount_taxes', 'amount_discount']:
+                      'amount_taxes', 'amount_discount']:
                 e["%s_" % x] = e[x]
                 e[x] = cformat(e[x])
             for x in ['qty']:
@@ -452,7 +455,7 @@ class Gcinvoice(object):
                     e['discount'] = qformat(e['discount'])
 
         rex = re.compile(getattr(self.options, 'regex_rex', None) or
-                '@\\{([^}]+)\\}')
+                         '@\\{([^}]+)\\}')
         rbe = re.compile(getattr(self.options, 'regex_rbe', None) or '%\\+')
         ren = re.compile(getattr(self.options, 'regex_ren', None) or '%-')
         rco = re.compile(getattr(self.options, 'regex_rco', None) or '%= ')
@@ -462,8 +465,8 @@ class Gcinvoice(object):
             ownername = None
 
         template = template or \
-                self.options.templates.get(ownername, None) or \
-                self.options.templates.get('default', None)
+            self.options.templates.get(ownername, None) or \
+            self.options.templates.get('default', None)
         if template is None:
             self.logger.error("No template given.")
             raise GcinvoiceError("No template given.")
@@ -473,7 +476,7 @@ class Gcinvoice(object):
             # select different templates depending on the invoice.
             templ_ = StringIO.StringIO()
             cop = _copier(rex, invc, rbe, ren, rco, ouf=templ_,
-                encoding=self._gcfile_encoding)
+                          encoding=self._gcfile_encoding)
             cop.copy([template])
             templ = templ_.getvalue()
             templ_.close()
@@ -482,39 +485,43 @@ class Gcinvoice(object):
                 self.logger.info("Using file [%s] as template" % templ)
             except Exception:
                 self.logger.info("The given template [%s] is not readable, "
-                        "trying to use it directly as string..." % templ,
-                        exc_info=True)
+                                 "trying to use it directly as string..." %
+                                 templ,
+                                 exc_info=True)
                 try:
                     templ = [(line+'\n') for line in template.split('\n')]
                     readfromfile = False
                 except Exception:
                     self.logger.error("The given template [%s] is neither a "
-                            "readable file, nor a readable string" % template,
-                            exc_info=True)
+                                      "readable file, nor a readable string" %
+                                      template,
+                                      exc_info=True)
                     raise GcinvoiceError("The template is neither a file nor a"
-                            " string")
+                                         " string")
         else:
             templ = template
         if readfromfile:
             self.logger.info("Using [%s] as file object" % templ)
             try:
                 templ = [line.decode(self._gcfile_encoding)
-                        for line in templ.readlines()]
+                         for line in templ.readlines()]
             except UnicodeDecodeError:
                 self.logger.error("The template file [%s] cannot be "
-                        "decoded using the encoding [%s] of Gnucash data files"
-                        % (template, self._gcfile_encoding), exc_info=True)
+                                  "decoded using the encoding [%s] of Gnucash "
+                                  "data files" %
+                                  (template, self._gcfile_encoding),
+                                  exc_info=True)
                 raise GcinvoiceError("The given template cannot be decoded")
 
         outfile = outfile or \
-                self.options.outfiles.get(ownername, None) or \
-                self.options.outfiles.get('default', None)
+            self.options.outfiles.get(ownername, None) or \
+            self.options.outfiles.get('default', None)
         if isinstance(outfile, basestring):
             # The name of the outfile is itself a template in order to
             # select different outfiles depending on the invoice.
             outf_ = StringIO.StringIO()
             cop = _copier(rex, invc, rbe, ren, rco, ouf=outf_,
-                    encoding=self._gcfile_encoding)
+                          encoding=self._gcfile_encoding)
             cop.copy([outfile])
             outfile = outf_.getvalue()
             outf_.close()
@@ -522,7 +529,7 @@ class Gcinvoice(object):
                 outf = file(outfile, "w")
             except Exception:
                 self.logger.error("Cannot open [%s] for writing" % outfile,
-                        exc_info=True)
+                                  exc_info=True)
                 raise
             self.logger.info("Using [%s] as outfile" % outfile)
         elif not outfile:
@@ -531,13 +538,14 @@ class Gcinvoice(object):
         else:
             outf = outfile
             self.logger.info("Using [%s] directly as outfile object")
+
         # now the very templating
         def handle(expr):
             self.logger.warn("Cannot do template for expression [%s]" % expr,
-                    exc_info=True)
+                             exc_info=True)
             return expr
         cop = _copier(rex, invc, rbe, ren, rco, ouf=outf, handle=handle,
-                encoding=self._gcfile_encoding)
+                      encoding=self._gcfile_encoding)
         try:
             cop.copy(templ)
         except Exception:
@@ -604,12 +612,12 @@ class Gcinvoice(object):
             discount = entry['discount']
         if discount_how not in ('PRETAX', 'SAMETIME', 'POSTTAX'):
             raise GcinvoiceError("Unknown discount how [%s] in entry [%s]" %
-                    (discount_how, entry['guid']))
+                                 (discount_how, entry['guid']))
         if discount_type not in ('PERCENT', 'VALUE'):
             raise GcinvoiceError("Unknown discount type [%s] in entry [%s]" %
-                    (discount_type, entry['guid']))
-            
-        if taxincluded: 
+                                 (discount_type, entry['guid']))
+
+        if taxincluded:
             if discount_how == 'POSTTAX':
                 if discount_type == 'VALUE':
                     entry['amount_discount'] = discount
@@ -618,7 +626,8 @@ class Gcinvoice(object):
                 if entry['amount_discount']:
                     entry['_warndiscount'] = True
                 entry['amount_gross'] = amount_raw - entry['amount_discount']
-                entry['amount_net'] = (entry['amount_gross'] -
+                entry['amount_net'] = (
+                    entry['amount_gross'] -
                     taxtable['value_sum']) / (1 + taxtable['percent_sum']/100)
             else:
                 amount_raw_net = (amount_raw - taxtable['value_sum']) / \
@@ -629,8 +638,10 @@ class Gcinvoice(object):
                     entry['amount_discount'] = discount * amount_raw_net / 100
                 entry['amount_net'] = amount_raw_net - entry['amount_discount']
                 if discount_how == 'PRETAX':
-                    entry['amount_gross'] = entry['amount_net'] * (1 +
-                        taxtable['percent_sum'] / 100) + taxtable['value_sum']
+                    entry['amount_gross'] = (
+                        entry['amount_net'] *
+                        (1 + taxtable['percent_sum'] / 100) +
+                        taxtable['value_sum'])
                 elif discount_how == 'SAMETIME':
                     entry['amount_gross'] = amount_raw - \
                         entry['amount_discount']
@@ -639,8 +650,8 @@ class Gcinvoice(object):
 
         else:
             if discount_how == 'POSTTAX':
-                amount_raw_gross = amount_raw * (1 +
-                        taxtable['percent_sum']/100) + taxtable['value_sum']
+                amount_raw_gross = amount_raw * (
+                    1 + taxtable['percent_sum']/100) + taxtable['value_sum']
                 if discount_type == 'VALUE':
                     entry['amount_discount'] = discount
                 else:
@@ -648,9 +659,11 @@ class Gcinvoice(object):
                 if entry['amount_discount']:
                     entry['_warndiscount'] = True
                 entry['amount_gross'] = amount_raw_gross - \
-                        entry['amount_discount']
-                entry['amount_net'] = (entry['amount_gross'] -
-                    taxtable['value_sum']) / (1 + taxtable['percent_sum']/100)
+                    entry['amount_discount']
+                entry['amount_net'] = (
+                    entry['amount_gross'] -
+                    taxtable['value_sum']) / \
+                    (1 + taxtable['percent_sum'] / 100)
             else:
                 if discount_type == 'VALUE':
                     entry['amount_discount'] = discount
@@ -658,17 +671,18 @@ class Gcinvoice(object):
                     entry['amount_discount'] = discount * amount_raw / 100
                 entry['amount_net'] = amount_raw - entry['amount_discount']
                 if discount_how == 'PRETAX':
-                    entry['amount_gross'] = entry['amount_net'] * (1 +
-                        taxtable['percent_sum']/100) + taxtable['value_sum']
+                    entry['amount_gross'] = entry['amount_net'] * (
+                        1 + taxtable['percent_sum']/100) + \
+                        taxtable['value_sum']
                 elif discount_how == 'SAMETIME':
-                    amount_raw_gross = amount_raw * (1 +
-                        taxtable['percent_sum']/100) + taxtable['value_sum']
+                    amount_raw_gross = amount_raw * (
+                        1 + taxtable['percent_sum'] / 100) + \
+                        taxtable['value_sum']
                     entry['amount_gross'] = amount_raw_gross - \
                         entry['amount_discount']
                 else:
                     raise AssertionError
         entry['amount_taxes'] = entry['amount_gross'] - entry['amount_net']
-
 
 
 # Helper functions and classes.
@@ -690,7 +704,7 @@ def _parse_configfiles(configfiles=None, options=None):
     config = ConfigParser.ConfigParser()
     parsed_files = config.read(filenames)
     try:
-        for k,v in config.items('GENERAL'):
+        for k, v in config.items('GENERAL'):
             if getattr(options, k, None) is None:
                 setattr(options, k, v)
     except ConfigParser.NoSectionError:
@@ -698,7 +712,7 @@ def _parse_configfiles(configfiles=None, options=None):
     for section in 'TEMPLATES', 'OUTFILES':
         d = getattr(options, section.lower(), dict())
         try:
-            for k,v in config.items(section):
+            for k, v in config.items(section):
                 d.setdefault(k, v)
         except ConfigParser.NoSectionError:
             pass
@@ -718,8 +732,9 @@ def _readnumber(val):
         True
 
     """
-    n,d = [Decimal(x) for x in val.split('/', 1)]
+    n, d = [Decimal(x) for x in val.split('/', 1)]
     return n/d
+
 
 def _readdate(timestring):
     """Get a date object from a Gnucash datetime string.
@@ -735,6 +750,7 @@ def _readdate(timestring):
         return None
     return datetime.datetime.strptime(timestring.split()[0], "%Y-%m-%d").date()
 
+
 def _readdatetime(timestring):
     """Get a datetime object from a Gnucash datetime string.
 
@@ -748,7 +764,7 @@ def _readdatetime(timestring):
     if timestring is None:
         return None
     return datetime.datetime.strptime(timestring.rsplit(None, 1)[0],
-            "%Y-%m-%d %H:%M:%S")
+                                      "%Y-%m-%d %H:%M:%S")
 
 
 def _currencyformatting(val, uselocale=True, precision=None, dashsymb=None):
@@ -818,6 +834,7 @@ def _quantityformatting(val, uselocale=True, precision=None, dashsymb=None):
                 pass
     return unicode(val)
 
+
 def intid(id):
     """Convert id to an integer, if possible.
 
@@ -840,10 +857,9 @@ def intid(id):
     return id2
 
 
-
 class _MyTemplate(Template):
-
     idpattern = '[_a-z][-_a-z0-9]*'
+
 
 # This is the Yet Another Python Templating Utility, Version 1.2
 # Taken from the ActiveState python Cookbook recipe 52305
@@ -855,13 +871,20 @@ class _nevermatch:
     "Polymorphic with a regex that never matches"
     def match(self, line):
         return None
+
+
 _never = _nevermatch()     # one reusable instance of it suffices
+
+
 def _identity(string, why):
     "A do-nothing-special-to-the-input, just-return-it function"
     return string
+
+
 def _nohandle(string):
     "A do-nothing handler that just re-raises the exception"
     raise
+
 
 # and now the real thing
 class _copier:
@@ -872,59 +895,68 @@ class _copier:
             "return the eval of a found expression, for replacement"
             # uncomment for debug: print '!!! replacing',match.group(1)
             expr = self.preproc(match.group(1), 'eval')
-            try: return unicode(eval(expr, self.globals, self.locals))
-            except: return unicode(self.handle(expr))
+            try:
+                return unicode(eval(expr, self.globals, self.locals))
+            except:
+                return unicode(self.handle(expr))
         block = self.locals['_bl']
-        if last is None: last = len(block)
-        while i<last:
+        if last is None:
+            last = len(block)
+        while i < last:
             line = block[i]
             match = self.restat.match(line)
             if match:   # a statement starts "here" (at line block[i])
                 # i is the last line to _not_ process
                 stat = match.string[match.end(0):].strip()
-                j=i+1   # look for 'finish' from here onwards
-                nest=1  # count nesting levels of statements
-                while j<last:
+                j = i+1   # look for 'finish' from here onwards
+                nest = 1  # count nesting levels of statements
+                while j < last:
                     line = block[j]
                     # first look for nested statements or 'finish' lines
                     if self.restend.match(line):    # found a statement-end
                         nest = nest - 1     # update (decrease) nesting
-                        if nest==0: break   # j is first line to _not_ process
+                        if nest == 0:
+                            break   # j is first line to _not_ process
                     elif self.restat.match(line):   # found a nested statement
                         nest = nest + 1     # update (increase) nesting
-                    elif nest==1:  # look for continuation only at this nesting
+                    elif nest == 1:
+                        # look for continuation only at this nesting
                         match = self.recont.match(line)
                         if match:                   # found a contin.-statement
                             nestat = match.string[match.end(0):].strip()
-                            stat = '%s _cb(%s,%s)\n%s' % (stat,i+1,j,nestat)
-                            i=j    # again, i is the last line to _not_ process
-                    j=j+1
+                            stat = '%s _cb(%s,%s)\n%s' % (stat, i+1, j, nestat)
+                            i = j  # again, i is the last line to _not_ process
+                    j = j+1
                 stat = self.preproc(stat, 'exec')
-                stat = '%s _cb(%s,%s)' % (stat,i+1,j)
+                stat = '%s _cb(%s,%s)' % (stat, i+1, j)
                 # for debugging, uncomment...: print "-> Executing: {"+stat+"}"
-                exec stat in self.globals,self.locals
-                i=j+1
+                exec(stat, self.globals, self.locals)
+                i = j+1
             else:       # normal line, just copy with substitution
-                self.ouf.write(self.regex.sub(repl,line).encode(self.encoding))
-                i=i+1
+                self.ouf.write(self.regex.sub(repl, line).encode(
+                    self.encoding))
+                i = i+1
+
     def __init__(self, regex=_never, dict={},
-            restat=_never, restend=_never, recont=_never, 
-            preproc=_identity, handle=_nohandle, ouf=sys.stdout,
-            encoding='ascii'):
+                 restat=_never, restend=_never, recont=_never,
+                 preproc=_identity, handle=_nohandle, ouf=sys.stdout,
+                 encoding='ascii'):
         "Initialize self's attributes"
-        self.regex   = regex
+        self.regex = regex
         self.globals = dict
-        self.locals  = { '_cb':self.copyblock }
-        self.restat  = restat
+        self.locals = {'_cb': self.copyblock}
+        self.restat = restat
         self.restend = restend
-        self.recont  = recont
+        self.recont = recont
         self.preproc = preproc
-        self.handle  = handle
-        self.ouf     = ouf
+        self.handle = handle
+        self.ouf = ouf
         self.encoding = encoding
+
     def copy(self, block=None, inf=sys.stdin):
         "Entry point: copy-with-processing a file, or a block of lines"
-        if block is None: block = inf.readlines()
+        if block is None:
+            block = inf.readlines()
         self.locals['_bl'] = block
         self.copyblock()
 
@@ -957,16 +989,16 @@ if __name__ == '__main__':
         data file and uses a template to generate an invoice.
         """)
     parser = optparse.OptionParser(usage=usage, description=description,
-            version=__version__)
+                                   version=__version__)
     parser.add_option("-d", "--debug", action="store_true", dest="debug")
     parser.add_option("-c", "--config", dest="config", metavar='FILE',
-            help="read configuration from FILE")
+                      help="read configuration from FILE")
     parser.add_option("-g", "--gcfile", dest="gcfile", metavar='FILE',
-            help="use Gnucash data file FILE")
+                      help="use Gnucash data file FILE")
     parser.add_option("-t", "--template", dest="template", metavar='FILE',
-            help="use template FILE")
+                      help="use template FILE")
     parser.add_option("-o", "--outfile", dest="outfile", metavar='FILE',
-            help="use FILE for output instead of stdout")
+                      help="use FILE for output instead of stdout")
     (options, args) = parser.parse_args()
     if len(args) != 1:
         parser.error("incorrect number of arguments")
@@ -974,5 +1006,4 @@ if __name__ == '__main__':
         options.loglevel = logging.DEBUG
 
     createInvoice(args[0], template=getattr(options, 'template', None),
-            outfile=getattr(options, 'outfile', None), options=options)
-
+                  outfile=getattr(options, 'outfile', None), options=options)
