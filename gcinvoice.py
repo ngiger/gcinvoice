@@ -23,7 +23,7 @@ import StringIO
 import textwrap
 import re
 import datetime
-from decimal import Decimal, localcontext
+from decimal import Decimal
 import functools
 import logging
 import optparse
