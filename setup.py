@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 from distutils.command.install import install as _install
 from distutils.core import setup
 import gcinvoice

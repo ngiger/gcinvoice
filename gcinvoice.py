@@ -11,26 +11,33 @@ run as script. Finally there is an Exception class 'GcinvoiceError'. These are
 the only 3 names imported by 'import * from gcinvoice'.
 
 """
+# Needed for Python2 compatibility, remove later
+from __future__ import division
+from __future__ import unicode_literals
+from builtins import object, str
 
 __version__ = '0.1.5'
 
-import locale
-import os
-import sys
+import argparse
+import codecs
+import configparser
 import copy
-import gzip
-from string import Template
-import StringIO
-import textwrap
-import re
 import datetime
 from decimal import Decimal
 import functools
+import gzip
+import io
+import locale
 import logging
-import optparse
-import ConfigParser
 from operator import itemgetter
+import os
+import re
+from string import Template
+import sys
+import textwrap
+
 from yaptu import copier
+
 get0 = itemgetter(0)
 get_entered = itemgetter('entered')
 
@@ -79,8 +86,6 @@ class Gcinvoice(object):
         }
 
     _xmlns_re = re.compile(r'([_a-z][-_a-z0-9]*):')
-
-    _gcfile_encoding = 'utf-8'  # utf-8 seems to be used by Gnucash
 
     def __init__(self, options=None):
 
@@ -364,7 +369,7 @@ class Gcinvoice(object):
                 self.invoices_[invoiceguid]['_warndiscount'] = True
             self.entries[entrydict['guid']] = entrydict
             invoiceentries.append(entrydict)
-        for iv in self.invoices.itervalues():
+        for iv in self.invoices.values():
             iv['entries'].sort(key=get_entered)
 
         self.logger.info("Successfully parsed Gnucash data file '%s'." %
@@ -429,16 +434,16 @@ class Gcinvoice(object):
             self.logger.error("No template given.")
             raise GcinvoiceError("No template given.")
         readfromfile = True
-        if isinstance(template, basestring):
+        if isinstance(template, str):
             # The name of the template file is itself a template in order to
             # select different templates depending on the invoice.
-            templ_ = StringIO.StringIO()
+            templ_ = io.StringIO()
             cop = copier_fun(templ_)
             cop.copy([template])
             templ = templ_.getvalue()
             templ_.close()
             try:
-                templ = file(templ)
+                templ = io.open(templ, 'r', encoding='utf-8')
                 self.logger.info("Using file [%s] as template" % templ)
             except Exception:
                 self.logger.info("The given template [%s] is not readable, "
@@ -457,39 +462,38 @@ class Gcinvoice(object):
                                          " string")
         else:
             templ = template
+
         if readfromfile:
             self.logger.info("Using [%s] as file object" % templ)
-            try:
-                templ = [line.decode(self._gcfile_encoding)
-                         for line in templ.readlines()]
-            except UnicodeDecodeError:
-                self.logger.error("The template file [%s] cannot be "
-                                  "decoded using the encoding [%s] of Gnucash "
-                                  "data files" %
-                                  (template, self._gcfile_encoding),
-                                  exc_info=True)
-                raise GcinvoiceError("The given template cannot be decoded")
+            templ = templ.readlines()
 
         return templ
 
     def getOutfile(self, outfile, copier_fun):
-        if isinstance(outfile, basestring):
+        if isinstance(outfile, str):
             # The name of the outfile is itself a template in order to
             # select different outfiles depending on the invoice.
-            outf_ = StringIO.StringIO()
+            outf_ = io.StringIO()
             cop = copier_fun(outf_)
             cop.copy([outfile])
             outfile = outf_.getvalue()
             outf_.close()
             try:
-                outf = file(outfile, "w")
+                outf = io.open(outfile, 'w', encoding='utf-8')
             except Exception:
                 self.logger.error("Cannot open [%s] for writing" % outfile,
                                   exc_info=True)
                 raise
             self.logger.info("Using [%s] as outfile" % outfile)
         elif not outfile:
-            outf = sys.stdout
+            # UTF-8 conversion needed for Python2,
+            # remove when dropping support for it
+            if sys.stdout.encoding != 'UTF-8':
+                UTF8Writer = codecs.getwriter('utf8')
+                outf = UTF8Writer(sys.stdout)
+            else:
+                outf = sys.stdout
+
             self.logger.info("Using stdout as outfile")
         else:
             outf = outfile
@@ -510,8 +514,7 @@ class Gcinvoice(object):
             return expr
 
         def copier_fun(outf):
-            return copier(rex, invoice, rbe, ren, rco, ouf=outf, handle=handle,
-                          encoding=self._gcfile_encoding)
+            return copier(rex, invoice, rbe, ren, rco, ouf=outf, handle=handle)
 
         return copier_fun
 
@@ -575,6 +578,8 @@ class Gcinvoice(object):
 
         try:
             cop.copy(templ)
+            if not isinstance(outf, io.StringIO):
+                outf.close()
         except Exception:
             self.logger.error("Error in template", exc_info=True)
             raise
@@ -655,10 +660,11 @@ class Gcinvoice(object):
                 entry['amount_gross'] = amount_raw - entry['amount_discount']
                 entry['amount_net'] = (
                     entry['amount_gross'] -
-                    taxtable['value_sum']) / (1 + taxtable['percent_sum']/100)
+                    taxtable['value_sum']) / (
+                        1 + taxtable['percent_sum'] / 100)
             else:
-                amount_raw_net = (amount_raw - taxtable['value_sum']) / \
-                        (1 + taxtable['percent_sum'] / 100)
+                amount_raw_net = (amount_raw - taxtable['value_sum']) / (
+                        1 + taxtable['percent_sum'] / 100)
                 if discount_type == 'VALUE':
                     entry['amount_discount'] = discount
                 else:
@@ -689,8 +695,8 @@ class Gcinvoice(object):
                     entry['amount_discount']
                 entry['amount_net'] = (
                     entry['amount_gross'] -
-                    taxtable['value_sum']) / \
-                    (1 + taxtable['percent_sum'] / 100)
+                    taxtable['value_sum']) / (
+                    1 + (taxtable['percent_sum'] / 100))
             else:
                 if discount_type == 'VALUE':
                     entry['amount_discount'] = discount
@@ -699,7 +705,7 @@ class Gcinvoice(object):
                 entry['amount_net'] = amount_raw - entry['amount_discount']
                 if discount_how == 'PRETAX':
                     entry['amount_gross'] = entry['amount_net'] * (
-                        1 + taxtable['percent_sum']/100) + \
+                         1 + taxtable['percent_sum'] / 100) + \
                         taxtable['value_sum']
                 elif discount_how == 'SAMETIME':
                     amount_raw_gross = amount_raw * (
@@ -714,6 +720,16 @@ class Gcinvoice(object):
 
 # Helper functions and classes.
 
+def _ensure_unicode(somestring):
+    """UTF-8 conversion needed for Python2,
+
+    Remove when dropping support for it
+    """
+    if somestring and not isinstance(somestring, str):
+        return somestring.decode('utf-8')
+
+    return somestring
+
 
 def _parse_configfiles(configfiles=None, options=None):
     """Parse configuration files.
@@ -726,22 +742,22 @@ def _parse_configfiles(configfiles=None, options=None):
                     and returned.
 
     """
-    options = options or optparse.Values()
+    options = options or argparse.Namespace()
     filenames = list(configfiles) if configfiles else []
-    config = ConfigParser.ConfigParser()
+    config = configparser.RawConfigParser()
     parsed_files = config.read(filenames)
     try:
         for k, v in config.items('GENERAL'):
             if getattr(options, k, None) is None:
-                setattr(options, k, v)
-    except ConfigParser.NoSectionError:
+                setattr(options, _ensure_unicode(k), _ensure_unicode(v))
+    except configparser.NoSectionError:
         pass
     for section in 'TEMPLATES', 'OUTFILES':
         d = getattr(options, section.lower(), dict())
         try:
             for k, v in config.items(section):
-                d.setdefault(k, v)
-        except ConfigParser.NoSectionError:
+                d.setdefault(_ensure_unicode(k), _ensure_unicode(v))
+        except configparser.NoSectionError:
             pass
         finally:
             setattr(options, section.lower(), d)
@@ -760,7 +776,7 @@ def _readnumber(val):
 
     """
     n, d = [Decimal(x) for x in val.split('/', 1)]
-    return n/d
+    return n / d
 
 
 def _readdate(timestring):
@@ -806,7 +822,7 @@ def _currencyformatting(val, uselocale=True, precision=None, dashsymb=None):
     Examples:
         >>> _currencyformatting(Decimal("12.34567"), uselocale=False,
         ...     precision=3)
-        u'12.346'
+        '12.346'
 
     """
     val = Decimal(val)
@@ -820,12 +836,12 @@ def _currencyformatting(val, uselocale=True, precision=None, dashsymb=None):
             parts = val.rsplit(dp, 2)
             try:
                 if len(parts) == 1:
-                    val = u'%s%s%s' % (val, dp, dashsymb)
+                    val = '%s%s%s' % (val, dp, dashsymb)
                 elif not int(parts[1]):
-                    val = u'%s%s%s' % (parts[0], dp, dashsymb)
+                    val = '%s%s%s' % (parts[0], dp, dashsymb)
             except:
                 pass
-    return unicode(val)
+    return str(val)
 
 
 def _quantityformatting(val, uselocale=True, precision=None, dashsymb=None):
@@ -840,7 +856,7 @@ def _quantityformatting(val, uselocale=True, precision=None, dashsymb=None):
     Examples:
         >>> _quantityformatting(Decimal("12.34567"), uselocale=False,
         ...     precision=3)
-        u'12.346'
+        '12.346'
 
     """
     val = Decimal(val)
@@ -854,12 +870,12 @@ def _quantityformatting(val, uselocale=True, precision=None, dashsymb=None):
             parts = val.rsplit(dp, 2)
             try:
                 if len(parts) == 1:
-                    val = u'%s%s%s' % (val, dp, dashsymb)
+                    val = '%s%s%s' % (val, dp, dashsymb)
                 elif not int(parts[1]):
-                    val = u'%s%s%s' % (parts[0], dp, dashsymb)
+                    val = '%s%s%s' % (parts[0], dp, dashsymb)
             except:
                 pass
-    return unicode(val)
+    return str(val)
 
 
 def intid(id):
@@ -869,12 +885,18 @@ def intid(id):
     Gnucash data files easier. The ids are often integers.
 
     Example:
+        >>> intid(None) is None
+        True
         >>> intid(5)
         5
         >>> intid('0012')
         12
-        >>> intid('abc')
-        'abc'
+        >>> # Because the doctest for this call expects unicode string
+        >>> # results, it does not work simultaneously on Python2 and Python3.
+        >>> # Therfore we skip it for now and added an equivalent test method
+        >>> # testIntid in test.py.
+        >>> intid('abc') # doctest: +SKIP
+            'abc'
 
     """
     try:
@@ -908,28 +930,27 @@ def createInvoice(invoiceid, template=None, outfile=None, options=None):
 
 
 if __name__ == '__main__':
-
-    usage = "usage: %prog [options] invoiceid"
     description = textwrap.dedent("""\
         gcinvoice.py extracts customer and invoice data from a Gnucash
         data file and uses a template to generate an invoice.
         """)
-    parser = optparse.OptionParser(usage=usage, description=description,
-                                   version=__version__)
-    parser.add_option("-d", "--debug", action="store_true", dest="debug")
-    parser.add_option("-c", "--config", dest="config", metavar='FILE',
-                      help="read configuration from FILE")
-    parser.add_option("-g", "--gcfile", dest="gcfile", metavar='FILE',
-                      help="use Gnucash data file FILE")
-    parser.add_option("-t", "--template", dest="template", metavar='FILE',
-                      help="use template FILE")
-    parser.add_option("-o", "--outfile", dest="outfile", metavar='FILE',
-                      help="use FILE for output instead of stdout")
-    (options, args) = parser.parse_args()
-    if len(args) != 1:
-        parser.error("incorrect number of arguments")
-    if options.debug:
-        options.loglevel = logging.DEBUG
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('invoiceid', help='The invoice ID')
+    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument("-d", "--debug", action="store_true", dest="debug")
+    parser.add_argument("-c", "--config", dest="config", metavar='FILE',
+                        help="read configuration from FILE")
+    parser.add_argument("-g", "--gcfile", dest="gcfile", metavar='FILE',
+                        help="use Gnucash data file FILE")
+    parser.add_argument("-t", "--template", dest="template", metavar='FILE',
+                        help="use template FILE")
+    parser.add_argument("-o", "--outfile", dest="outfile", metavar='FILE',
+                        help="use FILE for output instead of stdout")
+    args = parser.parse_args()
+    if args.debug:
+        args.loglevel = logging.DEBUG
 
-    createInvoice(args[0], template=getattr(options, 'template', None),
-                  outfile=getattr(options, 'outfile', None), options=options)
+    template = str(args.template) if args.template else None
+
+    createInvoice(args.invoiceid, template=template,
+                  outfile=getattr(args, 'outfile', None), options=args)

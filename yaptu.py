@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 # This is the Yet Another Python Templating Utility, Version 1.2
 # Taken from the ActiveState python Cookbook recipe 52305
 # by Alex Martelli (https://github.com/ActiveState/)
 # Adapted by Roman Bertle for the needs of this module.
+# Adapted by Fabian Köster for Python3 support
 
 import sys
 
 
 # utility stuff to avoid tests in the mainline code
-class _nevermatch:
+class _nevermatch(object):
     "Polymorphic with a regex that never matches"
     def match(self, line):
         return None
@@ -28,7 +32,7 @@ def _nohandle(string):
 
 
 # and now the real thing
-class copier:
+class copier(object):
     "Smart-copier (YAPTU) class"
     def copyblock(self, i=0, last=None):
         "Main copy method: process lines [i,last) of block"
@@ -37,9 +41,9 @@ class copier:
             # uncomment for debug: print '!!! replacing',match.group(1)
             expr = self.preproc(match.group(1), 'eval')
             try:
-                return unicode(eval(expr, self.globals, self.locals))
+                return str(eval(expr, self.globals, self.locals))
             except:
-                return unicode(self.handle(expr))
+                return str(self.handle(expr))
         block = self.locals['_bl']
         if last is None:
             last = len(block)
@@ -74,14 +78,12 @@ class copier:
                 exec(stat, self.globals, self.locals)
                 i = j+1
             else:       # normal line, just copy with substitution
-                self.ouf.write(self.regex.sub(repl, line).encode(
-                    self.encoding))
+                self.ouf.write(self.regex.sub(repl, line))
                 i = i+1
 
     def __init__(self, regex=_never, dict={},
                  restat=_never, restend=_never, recont=_never,
-                 preproc=_identity, handle=_nohandle, ouf=sys.stdout,
-                 encoding='ascii'):
+                 preproc=_identity, handle=_nohandle, ouf=sys.stdout):
         "Initialize self's attributes"
         self.regex = regex
         self.globals = dict
@@ -92,7 +94,6 @@ class copier:
         self.preproc = preproc
         self.handle = handle
         self.ouf = ouf
-        self.encoding = encoding
 
     def copy(self, block=None, inf=sys.stdin):
         "Entry point: copy-with-processing a file, or a block of lines"
