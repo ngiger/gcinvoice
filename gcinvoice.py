@@ -370,49 +370,17 @@ class Gcinvoice(object):
         self.logger.info("Successfully parsed Gnucash data file '%s'." %
                          gcfile)
 
-    def createInvoice(self, invoiceid, template=None, outfile=None):
-        """Create an invoice from the parsed Gnucash data.
-
-        Arguments:
-            invoiceid -- Id of the invoice to extract from Gnucash. A string
-                         or an integer.
-            template -- Name of the invoice template file, or list of lines.
-            outfile -- File name for the generated invoice, default is stdout.
-        Options from self.options used by this method:
-            quantities_uselocale -- Format quantity values using the locale
-                setting.
-            currency_uselocale -- Format currency values using the locale
-                setting.
-            quantities_precision -- Used decimal precision for quantities.
-            currency_precision -- Used decimal precision for currencies.
-            quantities_dashsymb -- Replace a zero fractional part of quantity
-                values with this symbol, but only if not None, and if
-                uselocale. Example: '12.00' -> '12.-'.
-            currency_dashsymb -- As quantities_dashsymb for currency values.
-            qformat -- Function to format quantity values, overrides
-                quantities_*, should take a Decimal as argument and return an
-                unicode string.
-            cformat -- Function to format currency values, overrides
-                currency_*, should take a Decimal as argument and return an
-                unicode string.
-            templates -- Dictionary of invoice template file names; keys are
-                the 'owner' values of the invoice, or 'default'.
-            outfile -- Name of the file to write the invoice out.
-            regex_rex -- Expression regex used by the template engine.
-            regex_rbe -- Begin statement regex.
-            regex_ren -- End statement regex.
-            regex_rco -- Continuation statement regex.
-
-        """
+    def getInvoice(self, invoiceid):
         invoiceid = intid(invoiceid)
         try:
-            invoice = self.invoices[invoiceid]
+            return self.invoices[invoiceid]
         except KeyError:
             self.logger.error("No invoice found for invoiceid [%s]" %
                               invoiceid)
             raise GcinvoiceError("No invoice found for invoiceid [%s]" %
                                  invoiceid)
-        invc = copy.deepcopy(invoice)
+
+    def prepareInvoice(self, invc):
         if invc.get('_warndiscount', False):
             self.logger.warn("The invoice contains POSTTAX discounts, which "
                              "are calculated differenty in gcinvoice "
@@ -456,19 +424,7 @@ class Gcinvoice(object):
                 else:
                     e['discount'] = qformat(e['discount'])
 
-        rex = re.compile(getattr(self.options, 'regex_rex', None) or
-                         '@\\{([^}]+)\\}')
-        rbe = re.compile(getattr(self.options, 'regex_rbe', None) or '%\\+')
-        ren = re.compile(getattr(self.options, 'regex_ren', None) or '%-')
-        rco = re.compile(getattr(self.options, 'regex_rco', None) or '%= ')
-        try:
-            ownername = invc['owner']['name']
-        except Exception:
-            ownername = None
-
-        template = template or \
-            self.options.templates.get(ownername, None) or \
-            self.options.templates.get('default', None)
+    def getTemplate(self, template, copier_fun):
         if template is None:
             self.logger.error("No template given.")
             raise GcinvoiceError("No template given.")
@@ -477,8 +433,7 @@ class Gcinvoice(object):
             # The name of the template file is itself a template in order to
             # select different templates depending on the invoice.
             templ_ = StringIO.StringIO()
-            cop = copier(rex, invc, rbe, ren, rco, ouf=templ_,
-                         encoding=self._gcfile_encoding)
+            cop = copier_fun(templ_)
             cop.copy([template])
             templ = templ_.getvalue()
             templ_.close()
@@ -515,15 +470,14 @@ class Gcinvoice(object):
                                   exc_info=True)
                 raise GcinvoiceError("The given template cannot be decoded")
 
-        outfile = outfile or \
-            self.options.outfiles.get(ownername, None) or \
-            self.options.outfiles.get('default', None)
+        return templ
+
+    def getOutfile(self, outfile, copier_fun):
         if isinstance(outfile, basestring):
             # The name of the outfile is itself a template in order to
             # select different outfiles depending on the invoice.
             outf_ = StringIO.StringIO()
-            cop = copier(rex, invc, rbe, ren, rco, ouf=outf_,
-                         encoding=self._gcfile_encoding)
+            cop = copier_fun(outf_)
             cop.copy([outfile])
             outfile = outf_.getvalue()
             outf_.close()
@@ -541,13 +495,84 @@ class Gcinvoice(object):
             outf = outfile
             self.logger.info("Using [%s] directly as outfile object")
 
-        # now the very templating
+        return outf
+
+    def getYaptuCopierFun(self, invoice):
+        rex = re.compile(getattr(self.options, 'regex_rex', None) or
+                         '@\\{([^}]+)\\}')
+        rbe = re.compile(getattr(self.options, 'regex_rbe', None) or '%\\+')
+        ren = re.compile(getattr(self.options, 'regex_ren', None) or '%-')
+        rco = re.compile(getattr(self.options, 'regex_rco', None) or '%= ')
+
         def handle(expr):
             self.logger.warn("Cannot do template for expression [%s]" % expr,
                              exc_info=True)
             return expr
-        cop = copier(rex, invc, rbe, ren, rco, ouf=outf, handle=handle,
-                     encoding=self._gcfile_encoding)
+
+        def copier_fun(outf):
+            return copier(rex, invoice, rbe, ren, rco, ouf=outf, handle=handle,
+                          encoding=self._gcfile_encoding)
+
+        return copier_fun
+
+    def createInvoice(self, invoiceid, template=None, outfile=None):
+        """Create an invoice from the parsed Gnucash data.
+
+        Arguments:
+            invoiceid -- Id of the invoice to extract from Gnucash. A string
+                         or an integer.
+            template -- Name of the invoice template file, or list of lines.
+            outfile -- File name for the generated invoice, default is stdout.
+        Options from self.options used by this method:
+            quantities_uselocale -- Format quantity values using the locale
+                setting.
+            currency_uselocale -- Format currency values using the locale
+                setting.
+            quantities_precision -- Used decimal precision for quantities.
+            currency_precision -- Used decimal precision for currencies.
+            quantities_dashsymb -- Replace a zero fractional part of quantity
+                values with this symbol, but only if not None, and if
+                uselocale. Example: '12.00' -> '12.-'.
+            currency_dashsymb -- As quantities_dashsymb for currency values.
+            qformat -- Function to format quantity values, overrides
+                quantities_*, should take a Decimal as argument and return an
+                unicode string.
+            cformat -- Function to format currency values, overrides
+                currency_*, should take a Decimal as argument and return an
+                unicode string.
+            templates -- Dictionary of invoice template file names; keys are
+                the 'owner' values of the invoice, or 'default'.
+            outfile -- Name of the file to write the invoice out.
+            regex_rex -- Expression regex used by the template engine.
+            regex_rbe -- Begin statement regex.
+            regex_ren -- End statement regex.
+            regex_rco -- Continuation statement regex.
+
+        """
+
+        invoice = copy.deepcopy(self.getInvoice(invoiceid))
+
+        self.prepareInvoice(invoice)
+
+        copier_fun = self.getYaptuCopierFun(invoice)
+
+        try:
+            ownername = invoice['owner']['name']
+        except Exception:
+            ownername = None
+
+        template = template or \
+            self.options.templates.get(ownername, None) or \
+            self.options.templates.get('default', None)
+        templ = self.getTemplate(template, copier_fun)
+
+        outfile = outfile or \
+            self.options.outfiles.get(ownername, None) or \
+            self.options.outfiles.get('default', None)
+        outf = self.getOutfile(outfile, copier_fun)
+
+        cop = copier_fun(outf)
+
         try:
             cop.copy(templ)
         except Exception:
