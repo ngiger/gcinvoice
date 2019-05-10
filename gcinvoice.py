@@ -297,6 +297,8 @@ class Gcinvoice(object):
                 invcdict['notes'] = invc.findtext(ns('invoice:notes'))
                 invcdict['currency'] = invc.findtext(
                         ns('invoice:currency/cmdty:id'))
+
+                invcdict['owner']['id'] = str(invcdict['owner']['id']).zfill(5)
             except Exception:
                 self.logger.warn("Problem parsing GncInvoice [%s]" %
                                  ET.tostring(invc), exc_info=True)
