@@ -326,7 +326,7 @@ class Gcinvoice(object):
                 entrydict['guid'] = entry.findtext(ns('entry:guid'))
                 entrydict['date'] = _readdate(entry.findtext(
                     ns('entry:date/ts:date')))
-                entrydict['entered'] = _readdatetime(entry.findtext(
+                entrydict['entered'] = _readdate(entry.findtext(
                     ns('entry:entered/ts:date')))
                 entrydict['description'] = entry.findtext(
                         ns('entry:description'))
