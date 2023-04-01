@@ -1,0 +1,18 @@
+id = 1 | owner = Caesar | currency = EUR
+notes = Items delivered in March
+date_opened = 2008-02-22
+date_posted = 2008-02-22
+terms name = Standard
+terms disc-days = 10
+terms discount = 5
+terms due-days = 30
+terms desc = 
+amount_net_ = 14769.23076923076923076923077
+amount_net = 14.769,23
+amount_gross_ = 19045.46153846153846153846154
+amount_gross = 19.045,46
+amount_taxes_ = 4276.230769230769230769230769
+amount_taxes = 4.276,23
+Currency format test: 0,50
+Quantity format test: 0,5
+

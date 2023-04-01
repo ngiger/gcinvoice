@@ -1,0 +1,19 @@
+a = @{a}
+b = @{ b }
+c+5 = @{ c + 5  }
+Some unicode: Ģ
+%+ for ind,x in enumerate(li):
+item @{ ind} of li is @{x}
+%= else:
+Finished the loop.
+%-
+%+ if c > 3:
+c is greater than 3
+%= else:
+c is not greater than 3
+%-
+%+ if c > 6:
+c is greater than 6
+%= else:
+c is not greater than 6
+%-

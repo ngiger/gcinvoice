@@ -1,0 +1,11 @@
+a = a1
+b = Ģ2
+c+5 = 10
+Some unicode: Ģ
+item 0 of li is 5
+item 1 of li is 4
+item 2 of li is 3
+Finished the loop.
+c is greater than 3
+c is not greater than 6
+
